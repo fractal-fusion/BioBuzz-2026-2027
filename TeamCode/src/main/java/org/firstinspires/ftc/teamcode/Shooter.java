@@ -19,7 +19,7 @@ public class Shooter {
         nectarShooter.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
-    public void shootPollen()
+    public void turnOnShooter()
     {
         pollenShooter.setPower(0.75);
         nectarShooter.setPower(0.75);

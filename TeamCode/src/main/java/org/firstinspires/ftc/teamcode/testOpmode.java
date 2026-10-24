@@ -28,6 +28,7 @@ public class testOpmode extends LinearOpMode {
         //Intake intake = new Intake(this);
 
         Shooter shooter = new Shooter(this);
+        Drivetrain drivetrain = new Drivetrain( this);
 
         testServo1 = hardwareMap.get(CRServo.class, testServo1Name);
         testServo2 = hardwareMap.get(CRServo.class, testServo2Name);
@@ -41,27 +42,32 @@ public class testOpmode extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()){
+
+            drivetrain.drive(gamepad1);
+
             if (gamepad1.a){
 //                testServo1.setPower(1);
 //                testServo2.setPower(1);
 
-                testMotor1.setPower(1);
-                testMotor2.setPower(1);
-
-
+                testMotor1.setPower(-1);
+                testMotor2.setPower(-1);
             }
             else if (gamepad1.b){
 //                testServo1.setPower(-1);
 //                testServo2.setPower(-1);
 //
-                testMotor1.setPower(-1);
-                testMotor2.setPower(-1);
-
+                testMotor1.setPower(1);
+                testMotor2.setPower(1);
+            }
+            else
+            {
+                testMotor1.setPower(0);
+                testMotor2.setPower(0);
             }
 
             if (gamepad1.x)
             {
-                shooter.shootPollen();
+                shooter.turnOnShooter();
             }
             else if(gamepad1.y)
             {
