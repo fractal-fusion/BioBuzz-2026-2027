@@ -27,14 +27,14 @@ public class testOpmode extends LinearOpMode {
 
         //Intake intake = new Intake(this);
 
-        Shooter shooter = new Shooter(this);
+//        Shooter shooter = new Shooter(this);
         Drivetrain drivetrain = new Drivetrain( this);
 
-        testServo1 = hardwareMap.get(CRServo.class, testServo1Name);
-        testServo2 = hardwareMap.get(CRServo.class, testServo2Name);
-
-        testMotor1 = hardwareMap.get(DcMotor.class, testMotor1Name);
-        testMotor2 = hardwareMap.get(DcMotor.class, testMotor2Name);
+//        testServo1 = hardwareMap.get(CRServo.class, testServo1Name);
+//        testServo2 = hardwareMap.get(CRServo.class, testServo2Name);
+//
+//        testMotor1 = hardwareMap.get(DcMotor.class, testMotor1Name);
+//        testMotor2 = hardwareMap.get(DcMotor.class, testMotor2Name);
 
 
 
@@ -45,34 +45,34 @@ public class testOpmode extends LinearOpMode {
 
             drivetrain.drive(gamepad1);
 
-            if (gamepad1.a){
-//                testServo1.setPower(1);
-//                testServo2.setPower(1);
-
-                testMotor1.setPower(-1);
-                testMotor2.setPower(-1);
-            }
-            else if (gamepad1.b){
-//                testServo1.setPower(-1);
-//                testServo2.setPower(-1);
+//            if (gamepad1.a){
+////                testServo1.setPower(1);
+////                testServo2.setPower(1);
 //
-                testMotor1.setPower(1);
-                testMotor2.setPower(1);
-            }
-            else
-            {
-                testMotor1.setPower(0);
-                testMotor2.setPower(0);
-            }
-
-            if (gamepad1.x)
-            {
-                shooter.turnOnShooter();
-            }
-            else if(gamepad1.y)
-            {
-                shooter.turnOffShooting();
-            }
+//                testMotor1.setPower(-1);
+//                testMotor2.setPower(-1);
+//            }
+//            else if (gamepad1.b){
+////                testServo1.setPower(-1);
+////                testServo2.setPower(-1);
+////
+//                testMotor1.setPower(1);
+//                testMotor2.setPower(1);
+//            }
+//            else
+//            {
+//                testMotor1.setPower(0);
+//                testMotor2.setPower(0);
+//            }
+//
+//            if (gamepad1.x)
+//            {
+//                shooter.turnOnShooter();
+//            }
+//            else if(gamepad1.y)
+//            {
+//                shooter.turnOffShooting();
+//            }
             telemetry.addLine("hello world");
             telemetry.update();
 
