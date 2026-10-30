@@ -47,7 +47,6 @@ public class Drivetrain {
 
         imu = opMode.hardwareMap.get(IMU.class, "imu");
 
-        // TODO: adjust the orientation parameters
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));

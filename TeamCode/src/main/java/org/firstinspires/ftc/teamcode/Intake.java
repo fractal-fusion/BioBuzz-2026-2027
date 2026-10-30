@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 public class Intake {
@@ -27,6 +28,9 @@ public class Intake {
         pollenTransfer = opMode.hardwareMap.get(DcMotor.class, "pollentransfer");
 
         //todo: (Vicente) check if you need to reverse a motor after you connect it.
+
+        pollenIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+        pollenTransfer.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     public void intakePollen()

@@ -5,12 +5,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Shooter {
     private OpMode opMode;
     private DcMotor shooterLeft;
     private DcMotor shooterRight;
-    private double rpm = 3000;
+    private Servo shooterGate;
     private boolean isOn = false;
 
     //RPM CONTROL
@@ -25,12 +26,17 @@ public class Shooter {
 
     //.setVelocity PIDF values
     //TODO: tune pidf values
-    public static double P = 220;
+    public static double P = 25;
     public static double I = 0.21;
     public static double D = 0;
-    public static double F = 12.20004;
+    public static double F = 1.0;
 
-    //
+    //Gate variables
+    //TODO: figure out open position and closed position
+    public static double GATE_OPEN_POSITION = 0;
+    public static double GATE_CLOSED_POSITION = 0;
+
+    //Gamepads for rising edge detector
     private Gamepad currentGamepad = new Gamepad();
     private Gamepad previousGamepad = new Gamepad();
 
@@ -39,6 +45,8 @@ public class Shooter {
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "leftshooter");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "rightshooter");
 
+        shooterGate = opMode.hardwareMap.get(Servo.class, "gate");
+
         //reset right motor so both motors spin forward with a power of 1
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -46,14 +54,10 @@ public class Shooter {
         shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-//        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F);
-//        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P, I, D, F);
+        ((DcMotorEx) shooterLeft).setVelocityPIDFCoefficients(P, I, D, F);
+        ((DcMotorEx) shooterRight).setVelocityPIDFCoefficients(P, I, D, F);
     }
-
-    public void turnOn(){
-        shooterRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shooterLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+    public void updateShooterVelocity(){
         ((DcMotorEx) shooterRight).setVelocity(currentTargetRPMTicksPerSecond);
         ((DcMotorEx) shooterLeft).setVelocity(currentTargetRPMTicksPerSecond);
     }
@@ -74,10 +78,6 @@ public class Shooter {
 
     public void setTargetRPM(double RPM) {
         currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
-    }
-    public void updateShooterVelocity(){
-        ((DcMotorEx) shooterRight).setVelocity(currentTargetRPMTicksPerSecond);
-        ((DcMotorEx) shooterLeft).setVelocity(currentTargetRPMTicksPerSecond);
     }
     public boolean atTargetVelocity() {
         return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND)
@@ -108,6 +108,15 @@ public class Shooter {
         shooterRight.setPower(0);
     }
 
+    //GATE METHODS
+    public void setGatePosition(double position){
+        shooterGate.setPosition(position);
+    }
+    public void controlGate(){
+        if (isOn && passedRPMThreshold){
+            shooterGate.setPosition(GATE_OPEN_POSITION);
+        }
+    }
     public void updateGamepad(Gamepad gamepad){
         previousGamepad.copy(currentGamepad);
         currentGamepad.copy(gamepad);

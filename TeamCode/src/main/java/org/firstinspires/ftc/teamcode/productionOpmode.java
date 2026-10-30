@@ -39,8 +39,7 @@ public class productionOpmode extends LinearOpMode {
             shooter.toggleShooter(gamepad2);
             if (gamepad2.a){
                 if (!shooter.isOn()) {
-                    //TODO: implement gate
-//                    shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+                    shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 }
                 intake.intakePollen();
             }
@@ -53,9 +52,9 @@ public class productionOpmode extends LinearOpMode {
 
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
-                shooter.updateShooterVelocity();
-//                shooter.setTargetRPM(calculate regression rpm method);
+                //shooter.setTargetRPM(calculate regression rpm method);
                 //shooter.setRampPosition(calclate ramp regression method)
+                shooter.updateShooterVelocity();
             }
             else {
                 shooter.turnOff();
@@ -66,6 +65,8 @@ public class productionOpmode extends LinearOpMode {
             //update everything
             drivetrain.updateIMU();
 
+            //automatically opens gate when shooter passes threshold
+            shooter.controlGate();
 
             shooter.updateGamepad(gamepad2);
             shooter.updateShooterThreshold();
