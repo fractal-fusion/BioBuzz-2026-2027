@@ -11,7 +11,8 @@ public class Shooter {
     private OpMode opMode;
     private DcMotor shooterLeft;
     private DcMotor shooterRight;
-    private Servo shooterGate;
+    private Servo gate;
+    private Servo hood;
     private boolean isOn = false;
 
     //RPM CONTROL
@@ -45,7 +46,7 @@ public class Shooter {
         shooterLeft = opMode.hardwareMap.get(DcMotor.class, "leftshooter");
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "rightshooter");
 
-        shooterGate = opMode.hardwareMap.get(Servo.class, "gate");
+        gate = opMode.hardwareMap.get(Servo.class, "gate");
 
         //reset right motor so both motors spin forward with a power of 1
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -110,12 +111,18 @@ public class Shooter {
 
     //GATE METHODS
     public void setGatePosition(double position){
-        shooterGate.setPosition(position);
+        gate.setPosition(position);
     }
     public void controlGate(){
         if (isOn && passedRPMThreshold){
-            shooterGate.setPosition(GATE_OPEN_POSITION);
+            gate.setPosition(GATE_OPEN_POSITION);
         }
+    }
+
+    //HOOD METHODS
+
+    public void setHoodPosition(double position){
+        hood.setPosition(position);
     }
     public void updateGamepad(Gamepad gamepad){
         previousGamepad.copy(currentGamepad);
