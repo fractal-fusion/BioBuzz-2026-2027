@@ -47,6 +47,7 @@ public class Shooter {
         shooterRight = opMode.hardwareMap.get(DcMotor.class, "rightshooter");
 
         gate = opMode.hardwareMap.get(Servo.class, "gate");
+        hood = opMode.hardwareMap.get(Servo.class, "hood");
 
         //reset right motor so both motors spin forward with a power of 1
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);

@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
+
 @Configurable
 @TeleOp(name = "testOpmode")
 public class testOpmode extends LinearOpMode {
@@ -16,11 +18,19 @@ public class testOpmode extends LinearOpMode {
     public static String testMotor2Name = "testmotor2";
 
 
+    public static String testServoName = "placeholder";
+
+    public double testPosition = 0;
+    public double increment = 0.01;
+    boolean pressed = false;
+
+
 
     CRServo testServo1;
     CRServo testServo2;
     DcMotor testMotor1;
     DcMotor testMotor2;
+    Servo testServo;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,6 +46,8 @@ public class testOpmode extends LinearOpMode {
 //
 //        testMotor1 = hardwareMap.get(DcMotor.class, testMotor1Name);
 //        testMotor2 = hardwareMap.get(DcMotor.class, testMotor2Name);
+
+        testServo = hardwareMap.get(Servo.class, testServoName);
 
 
 
@@ -67,7 +79,25 @@ public class testOpmode extends LinearOpMode {
 //            {
 //                shooter.turnOffShooting();
 //            }
-            telemetry.addLine("hello world");
+
+
+            if(gamepad1.right_bumper && !gamepad1.left_bumper && !pressed){
+                testPosition += increment;
+                pressed = true;
+            }
+            else if (gamepad1.left_bumper && !gamepad1.right_bumper && !pressed){
+                testPosition -= increment;
+                pressed = true;
+            }
+            else if (!gamepad1.right_bumper && !gamepad1.left_bumper && pressed){
+                pressed = false;
+            }
+
+            testPosition = Math.max(0, Math.min(testPosition, 1));
+
+            testServo.setPosition(testPosition);
+
+            telemetry.addData("servopos:", testPosition);
             telemetry.update();
 
         }

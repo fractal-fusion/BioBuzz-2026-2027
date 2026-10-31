@@ -53,7 +53,7 @@ public class productionOpmode extends LinearOpMode {
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
                 //shooter.setTargetRPM(calculate regression rpm method);
-                //shooter.setRampPosition(calclate ramp regression method)
+                //shooter.setHoodPosition(calclate ramp regression method)
                 shooter.updateShooterVelocity();
             }
             else {
