@@ -25,20 +25,20 @@ public class TeleopPoseManager {
 
     //define where team-specific poses are stored
     //start on red in case teleop is started without first starting auto
-    public static Pose currentUpwardsGoalPose = RED_UPWARDS_GOAL_POSITION;
+    public static Pose matchUpwardsGoalPose = RED_UPWARDS_GOAL_POSITION;
 
-    public static Pose currentDownwardsGoalPose = RED_DOWNWARDS_GOAL_POSITION;
+    public static Pose matchDownwardsGoalPose = RED_DOWNWARDS_GOAL_POSITION;
 
     //initalize and store the team-specific poses into the correct storage variables, as well as store the current pose
     public static void initializeTeleopPoses(Team team, Pose currentpose){
 
         if (team == Team.BLUE) {
-            currentUpwardsGoalPose = BLUE_UPWARDS_GOAL_POSITION;
-            currentDownwardsGoalPose = BLUE_DOWNWARDS_GOAL_POSITION;
+            matchUpwardsGoalPose = BLUE_UPWARDS_GOAL_POSITION;
+            matchDownwardsGoalPose = BLUE_DOWNWARDS_GOAL_POSITION;
         }
         else if (team == Team.RED) {
-            currentUpwardsGoalPose = RED_UPWARDS_GOAL_POSITION;
-            currentDownwardsGoalPose = RED_DOWNWARDS_GOAL_POSITION;
+            matchUpwardsGoalPose = RED_UPWARDS_GOAL_POSITION;
+            matchDownwardsGoalPose = RED_DOWNWARDS_GOAL_POSITION;
         }
 
         currentPose = currentpose;

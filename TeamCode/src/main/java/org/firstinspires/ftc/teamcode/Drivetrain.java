@@ -4,11 +4,8 @@ import com.pedropathing.math.Pose;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 public class Drivetrain {
@@ -34,6 +31,11 @@ public class Drivetrain {
     public static double SECONDARY_PID_THRESHOLD = 0.2; //less than this switch to secondary pid
     public static double primaryP = 0.5;
     public static double secondaryP = 0.8;
+
+    //current goal pose
+    private Pose currentGoalPose = TeleopPoseManager.matchUpwardsGoalPose; //default will be red
+
+    //gamepads for rising edge detector
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
     private OpMode opMode;
@@ -166,11 +168,19 @@ public class Drivetrain {
         }
     }
 
-
-    //boolean methods
-    public boolean isInUpwardHalf(Pose currentPose){
-        return currentPose.y() > 70.75;
+    //goal pose methods since there's two we need to switch between depending on position
+    public void updateCurrentGoalPose(Pose currentPose){
+        if (currentPose.y() > 70.75){
+            currentGoalPose = TeleopPoseManager.matchUpwardsGoalPose;
+        }
+        else{
+            currentGoalPose = TeleopPoseManager.matchDownwardsGoalPose;
+        }
     }
+    public Pose getCurrentGoalPose(){
+        return currentGoalPose;
+    }
+
 }
 
 

@@ -13,10 +13,10 @@ public class ShooterVelocityTuner extends LinearOpMode {
     DcMotorEx shooterLeft;
     double currentVelocity;
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 1.375;
-    public static double I = 0.1375;
+    public static double P = 7.7;
+    public static double I = 0;
     public static double D = 0;
-    public static double F = 5.0;
+    public static double F = 0;
     public static double TARGET_RPM = 3000;
 
 
@@ -31,7 +31,7 @@ public class ShooterVelocityTuner extends LinearOpMode {
         shooterLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //reset encoders on initialization
         shooterLeft.setVelocityPIDFCoefficients(P, I, D, F);
 
-        shooterRight.setDirection(DcMotor.Direction.REVERSE);
+        shooterLeft.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
 
@@ -39,7 +39,7 @@ public class ShooterVelocityTuner extends LinearOpMode {
             shooterRight.setVelocity(TARGET_RPM * Shooter.RPM_TO_TICKS_PER_SECOND);
             shooterLeft.setVelocity(TARGET_RPM * Shooter.RPM_TO_TICKS_PER_SECOND);
 
-            currentVelocity = shooterRight.getVelocity();
+            currentVelocity = shooterLeft.getVelocity();
 
             telemetry.addData("current velocity", currentVelocity * Shooter.TICKS_PER_SECOND_TO_RPM);
             telemetry.addData("target velocity", TARGET_RPM);

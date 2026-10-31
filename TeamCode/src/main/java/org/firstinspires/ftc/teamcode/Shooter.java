@@ -23,9 +23,7 @@ public class Shooter {
 
     public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
     public static double TARGET_RPM_TOLERANCE = 50;
-    public static double LOWER_THRESHOLD_RPM_OFFSET = 50;
-    public static double REGRESSION_RPM_ODOMETRY = 0;
-    public static double REGRESSION_RESTING_RPM = 2800;
+    public static double LOWER_THRESHOLD_RPM_OFFSET = 80;
 
     //.setVelocity PIDF values
     //TODO: tune pidf values
@@ -42,8 +40,9 @@ public class Shooter {
     public static double HOOD_OFFSET = 0.01; //offset so the hood is in the right place
     public static double HOOD_MAX_POSITION = 0.36;
 
-    //regression variables TODO: create calculate regression power methods
-
+    //regression variables
+    public static double REGRESSION_RPM_OFFSET = 0;
+    public static double REGRESSION_RESTING_RPM = 2800; //lower rpm to keep the shooter running at
 
 
 
@@ -53,8 +52,8 @@ public class Shooter {
 
     public Shooter(LinearOpMode opMode)
     {
-        shooterLeft = opMode.hardwareMap.get(DcMotor.class, "leftshooter");
-        shooterRight = opMode.hardwareMap.get(DcMotor.class, "rightshooter");
+        shooterLeft = opMode.hardwareMap.get(DcMotor.class, "shooterleft");
+        shooterRight = opMode.hardwareMap.get(DcMotor.class, "shooterright");
 
         gate = opMode.hardwareMap.get(Servo.class, "gate");
         hood = opMode.hardwareMap.get(Servo.class, "hood");
@@ -146,6 +145,15 @@ public class Shooter {
     public void updateGamepad(Gamepad gamepad){
         previousGamepad.copy(currentGamepad);
         currentGamepad.copy(gamepad);
+    }
+
+    //regression calculation methods TODO: make regessions
+    public double calculateRPMRegression(double distance){
+        return 0.0;
+    }
+
+    public double calculateHoodRegression(double distance){
+        return 0.0;
     }
 
     //variable getters

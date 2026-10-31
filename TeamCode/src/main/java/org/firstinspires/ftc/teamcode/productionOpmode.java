@@ -1,11 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.configurables.annotations.Configurable;
-import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-
-import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Configurable
 @TeleOp(name = "productionOpmode")
@@ -19,8 +16,8 @@ public class productionOpmode extends LinearOpMode {
         Drivetrain drivetrain = new Drivetrain( this);
 
         //initialize follower TODO: tune pedro so follower is not null
-        Follower follower = Constants.create(hardwareMap);
-        follower.setPose(TeleopPoseManager.currentPose);
+//        Follower follower = Constants.create(hardwareMap);
+//        follower.setPose(TeleopPoseManager.currentPose);
 
         waitForStart();
         if (isStopRequested()) return;
@@ -28,17 +25,12 @@ public class productionOpmode extends LinearOpMode {
         while (opModeIsActive()){
 
             //update follower
-            follower.update();
+//            follower.update();
 
             //GAMEPAD 1 CONTROLS
             if (gamepad1.a){
-                //autoalign TODO: fill in odo goal bearing after setting up current goal logic
-                if (drivetrain.isInUpwardHalf(follower.pose())){
-                    drivetrain.driveAutoAlign(gamepad1, drivetrain.autoAlignTwoStageProportionalController(drivetrain.calculateOdoGoalBearing(follower.pose(), TeleopPoseManager.currentUpwardsGoalPose)));
-                }
-                else{
-                    drivetrain.driveAutoAlign(gamepad1, drivetrain.autoAlignTwoStageProportionalController(drivetrain.calculateOdoGoalBearing(follower.pose(), TeleopPoseManager.currentDownwardsGoalPose)));
-                }
+                //autoalign
+//                drivetrain.autoAlignTwoStageProportionalController(drivetrain.calculateOdoGoalBearing(follower.pose(), drivetrain.getCurrentGoalPose()));
             }
             else if (gamepad1.x){
                 drivetrain.resetIMU();
@@ -65,8 +57,8 @@ public class productionOpmode extends LinearOpMode {
 
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
-                //shooter.setTargetRPM(calculate regression rpm method);
-                //shooter.setHoodPosition(calclate ramp regression method)
+//                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+//                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
                 shooter.updateShooterVelocity();
             }
             else {
@@ -88,6 +80,10 @@ public class productionOpmode extends LinearOpMode {
 
             //intake updates
             intake.updateGamepad(gamepad2);
+
+            //drivetrain updates
+//            drivetrain.updateCurrentGoalPose(follower.pose());
+
             telemetry.update();
 
         }

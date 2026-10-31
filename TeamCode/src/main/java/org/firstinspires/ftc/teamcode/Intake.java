@@ -18,7 +18,7 @@ public class Intake {
     private DcMotor pollenTransfer;
     private Servo ramp;
 
-    //constant variables for ramp TODO: find ramp positions
+    //constant variables for ramp
     public static double RAMP_UP_POSITION = 0.37;
     public static double RAMP_DOWN_POSITION = 0.07;
 
