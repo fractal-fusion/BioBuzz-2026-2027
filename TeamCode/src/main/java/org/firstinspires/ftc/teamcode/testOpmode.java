@@ -18,7 +18,7 @@ public class testOpmode extends LinearOpMode {
     public static String testMotor2Name = "testmotor2";
 
 
-    public static String testServoName = "placeholder";
+    public static String testServoName = "intakeramp";
 
     public double testPosition = 0;
     public double increment = 0.01;
@@ -42,13 +42,15 @@ public class testOpmode extends LinearOpMode {
         Intake intake = new Intake(this);
 
 //        testServo1 = hardwareMap.get(CRServo.class, testServo1Name);
-//        testServo2 = hardwareMap.get(CRServo.class, testServo2Name);
+//        testServo2 = hardwareMap.get(CRServo.class, testServo2Nam
+//        e);
 //
 //        testMotor1 = hardwareMap.get(DcMotor.class, testMotor1Name);
 //        testMotor2 = hardwareMap.get(DcMotor.class, testMotor2Name);
 
         testServo = hardwareMap.get(Servo.class, testServoName);
 
+//        testServo.setDirection(Servo.Direction.REVERSE);
 
 
         waitForStart();

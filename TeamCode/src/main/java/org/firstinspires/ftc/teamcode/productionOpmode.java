@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Configurable
 @TeleOp(name = "productionOpmode")
@@ -12,20 +13,32 @@ public class productionOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         //initialize subsystems
         Intake intake = new Intake(this);
         Shooter shooter = new Shooter(this);
         Drivetrain drivetrain = new Drivetrain( this);
+
+        //initialize follower TODO: tune pedro so follower is not null
+        Follower follower = Constants.create(hardwareMap);
+        follower.setPose(TeleopPoseManager.currentPose);
 
         waitForStart();
         if (isStopRequested()) return;
 
         while (opModeIsActive()){
 
+            //update follower
+            follower.update();
+
             //GAMEPAD 1 CONTROLS
             if (gamepad1.a){
-                //autoalign
+                //autoalign TODO: fill in odo goal bearing after setting up current goal logic
+                if (drivetrain.isInUpwardHalf(follower.pose())){
+                    drivetrain.driveAutoAlign(gamepad1, drivetrain.autoAlignTwoStageProportionalController(drivetrain.calculateOdoGoalBearing(follower.pose(), TeleopPoseManager.currentUpwardsGoalPose)));
+                }
+                else{
+                    drivetrain.driveAutoAlign(gamepad1, drivetrain.autoAlignTwoStageProportionalController(drivetrain.calculateOdoGoalBearing(follower.pose(), TeleopPoseManager.currentDownwardsGoalPose)));
+                }
             }
             else if (gamepad1.x){
                 drivetrain.resetIMU();
@@ -35,7 +48,7 @@ public class productionOpmode extends LinearOpMode {
             }
 
             //GAMEPAD 2 CONTROLS
-
+            intake.toggleRampMode(gamepad2);
             shooter.toggleShooter(gamepad2);
             if (gamepad2.a){
                 if (!shooter.isOn()) {
@@ -65,12 +78,16 @@ public class productionOpmode extends LinearOpMode {
             //update everything
             drivetrain.updateIMU();
 
+
+            //shooter updates
             //automatically opens gate when shooter passes threshold
             shooter.controlGate();
 
             shooter.updateGamepad(gamepad2);
             shooter.updateShooterThreshold();
 
+            //intake updates
+            intake.updateGamepad(gamepad2);
             telemetry.update();
 
         }

@@ -19,6 +19,8 @@ public class Shooter {
     public boolean passedRPMThreshold = false; //boolean for once the shooter reaches velocity
 
     public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
+    public static double TICKS_PER_SECOND_TO_RPM = 60.0 / 28.0; //inverse of above
+
     public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
     public static double TARGET_RPM_TOLERANCE = 50;
     public static double LOWER_THRESHOLD_RPM_OFFSET = 50;
@@ -32,10 +34,18 @@ public class Shooter {
     public static double D = 0;
     public static double F = 1.0;
 
-    //Gate variables
-    //TODO: figure out open position and closed position
-    public static double GATE_OPEN_POSITION = 0;
-    public static double GATE_CLOSED_POSITION = 0;
+    //gate variables
+    public static double GATE_OPEN_POSITION = 0.01;
+    public static double GATE_CLOSED_POSITION = 0.13;
+
+    //hood variables
+    public static double HOOD_OFFSET = 0.01; //offset so the hood is in the right place
+    public static double HOOD_MAX_POSITION = 0.36;
+
+    //regression variables TODO: create calculate regression power methods
+
+
+
 
     //Gamepads for rising edge detector
     private Gamepad currentGamepad = new Gamepad();
@@ -48,6 +58,14 @@ public class Shooter {
 
         gate = opMode.hardwareMap.get(Servo.class, "gate");
         hood = opMode.hardwareMap.get(Servo.class, "hood");
+
+        //reverse hood so increase in position increases hood
+        hood.setDirection(Servo.Direction.REVERSE);
+        //reset hood down to 0
+        setHoodPosition(0);
+
+        //open gate
+        gate.setPosition(GATE_OPEN_POSITION);
 
         //reset right motor so both motors spin forward with a power of 1
         shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -123,7 +141,7 @@ public class Shooter {
     //HOOD METHODS
 
     public void setHoodPosition(double position){
-        hood.setPosition(position);
+        hood.setPosition(position + HOOD_OFFSET);
     }
     public void updateGamepad(Gamepad gamepad){
         previousGamepad.copy(currentGamepad);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.pedropathing.math.Pose;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,8 +28,12 @@ public class Drivetrain {
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
     public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
-
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
+
+    //autoalign proportional controller values
+    public static double SECONDARY_PID_THRESHOLD = 0.2; //less than this switch to secondary pid
+    public static double primaryP = 0.5;
+    public static double secondaryP = 0.8;
     public Gamepad currentGamepad = new Gamepad();
     public Gamepad previousGamepad = new Gamepad();
     private OpMode opMode;
@@ -59,6 +64,8 @@ public class Drivetrain {
         backRight.setDirection(DcMotor.Direction.REVERSE);
     }
 
+    //imu methods for field centric drive
+
     public void resetIMU() {
         imu.resetYaw();
     }
@@ -66,6 +73,8 @@ public class Drivetrain {
     public void updateIMU() {
         botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
+
+    //drive methods that control motors
     public void drive(Gamepad gamepad)
     {
         //get gamepad inputs
@@ -125,8 +134,42 @@ public class Drivetrain {
         backRight.setPower(backRightPower);
     }
 
-    public double calculateAutoAlignPowerLimelight(double bearing) {
-        return Range.clip(bearing * AUTO_ALIGN_GAIN_LIMELIGHT, -AUTO_ALIGN_MAX_SPEED, AUTO_ALIGN_MAX_SPEED);
+    //odometry methods for calculating values
+    public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {
+        double vectorY = goalPose.y() - robotPose.y();
+        double vectorX = goalPose.x() - robotPose.x();
+
+        double angle = (Math.atan2(vectorY, vectorX) - robotPose.heading());
+        if (angle <= -Math.PI) angle += Math.PI * 2;
+        if (angle > Math.PI) angle -= Math.PI * 2;
+        return angle;
+    }
+
+    public double calculateOdoGoalDistance(Pose robotPose, Pose goalPose){
+        double vectorY = Math.abs(goalPose.y() - robotPose.y());
+        double vectorX = Math.abs(goalPose.x() - robotPose.x());
+
+        return Math.hypot(vectorX, vectorY);
+    }
+
+    //autoalign proportional methods
+    public double autoAlignProportionalController(double error){
+        return error * primaryP;
+    }
+
+    public double autoAlignTwoStageProportionalController(double error){
+        if (error < SECONDARY_PID_THRESHOLD){
+            return error * secondaryP;
+        }
+        else{
+            return error * primaryP;
+        }
+    }
+
+
+    //boolean methods
+    public boolean isInUpwardHalf(Pose currentPose){
+        return currentPose.y() > 70.75;
     }
 }
 
