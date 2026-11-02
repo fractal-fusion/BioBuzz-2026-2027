@@ -13,11 +13,11 @@ public class ShooterVelocityTuner extends LinearOpMode {
     DcMotorEx shooterLeft;
     double currentVelocity;
     public static double PID_OFFSET = 9.002; //right motor is always slower
-    public static double P = 7.7;
-    public static double I = 0;
+    public static double P = 150;
+    public static double I = 0.14;
     public static double D = 0;
-    public static double F = 0;
-    public static double TARGET_RPM = 3000;
+    public static double F = 14;
+    public static double TARGET_RPM = 3500;
 
 
     @Override

@@ -11,6 +11,8 @@ public class Shooter {
     private OpMode opMode;
     private DcMotor shooterLeft;
     private DcMotor shooterRight;
+
+    public static double staticRPM = 3000;
     private Servo gate;
     private Servo hood;
     private boolean isOn = false;
@@ -26,11 +28,10 @@ public class Shooter {
     public static double LOWER_THRESHOLD_RPM_OFFSET = 80;
 
     //.setVelocity PIDF values
-    //TODO: tune pidf values
-    public static double P = 25;
-    public static double I = 0.21;
+    public static double P = 150;
+    public static double I = 0.14;
     public static double D = 0;
-    public static double F = 1.0;
+    public static double F = 14;
 
     //gate variables
     public static double GATE_OPEN_POSITION = 0.01;
@@ -67,7 +68,7 @@ public class Shooter {
         gate.setPosition(GATE_OPEN_POSITION);
 
         //reset right motor so both motors spin forward with a power of 1
-        shooterRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        shooterLeft.setDirection(DcMotorSimple.Direction.REVERSE);
 
         //reset encoders on initialization
         shooterRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
