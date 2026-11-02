@@ -12,7 +12,7 @@ public class Shooter {
     private DcMotor shooterLeft;
     private DcMotor shooterRight;
 
-    public static double staticRPM = 3000;
+    public static double staticRPM = 2000;
     private Servo gate;
     private Servo hood;
     private boolean isOn = false;
@@ -28,7 +28,7 @@ public class Shooter {
     public static double LOWER_THRESHOLD_RPM_OFFSET = 80;
 
     //.setVelocity PIDF values
-    public static double P = 150;
+    public static double P = 250;
     public static double I = 0.14;
     public static double D = 0;
     public static double F = 14;
@@ -160,6 +160,14 @@ public class Shooter {
     //variable getters
     public boolean isOn(){
         return isOn;
+    }
+
+    public double shooterLeftGetVelocity() {
+        return (((DcMotorEx) shooterLeft).getVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
+    }
+
+    public double shooterRightGetVelocity() {
+        return (((DcMotorEx) shooterRight).getVelocity() * Shooter.TICKS_PER_SECOND_TO_RPM);
     }
 
     //                         |

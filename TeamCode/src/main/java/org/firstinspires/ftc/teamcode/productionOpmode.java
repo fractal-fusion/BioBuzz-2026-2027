@@ -10,6 +10,14 @@ public class productionOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        //manual hood variables //TODO: REMOVE
+        double increment = 0.01;
+        double testPosition = 0;
+        boolean pressed = false;
+
+
+
         //initialize subsystems
         Intake intake = new Intake(this);
         Shooter shooter = new Shooter(this);
@@ -57,6 +65,7 @@ public class productionOpmode extends LinearOpMode {
 
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
+                shooter.setTargetRPM(Shooter.staticRPM);
 //                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
 //                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
                 shooter.updateShooterVelocity();
@@ -66,6 +75,27 @@ public class productionOpmode extends LinearOpMode {
                 //or keep shooter on at a lower rpm
 //                shooter.turnOffRestingRpm();
             }
+
+            //manual hood control TODO:REMOVE
+            if(gamepad2.right_bumper && !gamepad2.left_bumper && !pressed){
+                testPosition += increment;
+                pressed = true;
+            }
+            else if (gamepad2.left_bumper && !gamepad2.right_bumper && !pressed){
+                testPosition -= increment;
+                pressed = true;
+            }
+            else if (!gamepad2.right_bumper && !gamepad2.left_bumper && pressed){
+                pressed = false;
+            }
+
+            testPosition = Math.max(0, Math.min(testPosition, 0.36));
+
+            shooter.setHoodPosition(testPosition);
+
+            telemetry.addData("servopos:", testPosition);
+            telemetry.addData("shooter velocity:", shooter.shooterLeftGetVelocity());
+            telemetry.update();
 
             //update everything
             drivetrain.updateIMU();
