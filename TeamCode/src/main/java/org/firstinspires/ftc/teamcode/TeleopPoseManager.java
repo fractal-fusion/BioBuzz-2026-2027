@@ -4,6 +4,11 @@ import com.pedropathing.api.PoseFactory;
 import com.pedropathing.math.Pose;
 
 public class TeleopPoseManager {
+
+    //relocalization pose constants
+
+    public static Pose BOTTOM_LEFT_POSE = new Pose(8.25, 8.375, 90);
+
     public enum Team {
         NONE,
         BLUE,
