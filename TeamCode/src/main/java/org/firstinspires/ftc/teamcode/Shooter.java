@@ -1,4 +1,8 @@
 package org.firstinspires.ftc.teamcode;
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -179,6 +183,15 @@ public class Shooter {
         if (currentGamepad.x && !previousGamepad.x){
             isOn = !isOn;
         }
+    }
+
+    //AUTO COMMANDS
+
+    public Command turnOnShooter(double target) {
+        return sequential(
+                instant(() -> setTargetRPM(target)),
+                instant(this::updateShooterVelocity)
+        );
     }
 
 }

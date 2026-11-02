@@ -107,6 +107,8 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("shooter velocity:", shooter.shooterLeftGetVelocity());
             telemetry.addData("current pose:", follower.pose());
 
+            telemetry.addData("currentGoal", drivetrain.getCurrentGoalPose());
+
 
             //update everything
 

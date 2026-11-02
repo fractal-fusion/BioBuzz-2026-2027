@@ -20,7 +20,7 @@ public class Intake {
 
     //constant variables for ramp
     public static double RAMP_UP_POSITION = 0.37;
-    public static double RAMP_DOWN_POSITION = 0.07;
+    public static double RAMP_DOWN_POSITION = 0.12;
 
     //gamepad variables for toggling ramp mode
     private Gamepad currentGamepad = new Gamepad();
