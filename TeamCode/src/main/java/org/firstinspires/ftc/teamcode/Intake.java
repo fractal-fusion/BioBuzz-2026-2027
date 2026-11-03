@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode;
 import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
-
+@Configurable
 public class Intake {
     // front is relative to the direction that the intake is facing
 
@@ -32,7 +33,7 @@ public class Intake {
     private boolean rampMode = false;
 
     public static final double INTAKE_SPEED = 1; // change this to speed up or slow down intakes
-
+    public static double TRANSFER_SPEED = 1;
     private OpMode opMode;
 
     public Intake(OpMode opmode)
@@ -53,7 +54,7 @@ public class Intake {
     public void intakePollen()
     {
             pollenIntake.setPower(INTAKE_SPEED);
-            pollenTransfer.setPower(INTAKE_SPEED);
+            pollenTransfer.setPower(TRANSFER_SPEED);
     }
 
     public void outtakePollen()

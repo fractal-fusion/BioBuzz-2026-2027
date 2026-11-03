@@ -14,9 +14,6 @@ public class Drivetrain {
     public DcMotor backLeft;
     public DcMotor frontRight;
     public DcMotor backRight;
-    public DcMotor testWheel;
-
-    public static String testWheelHardwareMapName = "frontright";
     public IMU imu;
 
     //botHeading used for field centric drive
@@ -24,7 +21,6 @@ public class Drivetrain {
 
     //constants used for tuning auto alignment
     public static double AUTO_ALIGN_MAX_SPEED = 0.8; //auto alignment speed is clipped to minimum negative this and maximum positive this (bilateral tolerance)
-    public static double AUTO_ALIGN_GAIN_LIMELIGHT = 0.0175; //converts tx from limelight to power
     public static double AUTO_ALIGN_DRIVE_POWER_MULTIPLIER_MIDPOINT = 0.45; //half of max power
 
     //autoalign proportional controller values
@@ -49,8 +45,6 @@ public class Drivetrain {
         backLeft = opMode.hardwareMap.get(DcMotor.class, "backleft");
         frontRight = opMode.hardwareMap.get(DcMotor.class, "frontright");
         backRight = opMode.hardwareMap.get(DcMotor.class, "backright");
-
-        testWheel = opMode.hardwareMap.get(DcMotor.class, testWheelHardwareMapName);
 
         imu = opMode.hardwareMap.get(IMU.class, "imu");
 

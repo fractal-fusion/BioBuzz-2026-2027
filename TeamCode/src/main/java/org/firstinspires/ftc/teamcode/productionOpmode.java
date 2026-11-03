@@ -52,7 +52,7 @@ public class productionOpmode extends LinearOpMode {
 
             //relocalization logic
             if (gamepad1.dpad_down){
-                follower.setPose(TeleopPoseManager.BOTTOM_LEFT_POSE);
+                follower.setPose(TeleopPoseManager.RED_BOTTOM_LEFT_POSE);
             }
 
             //GAMEPAD 2 CONTROLS
@@ -73,33 +73,33 @@ public class productionOpmode extends LinearOpMode {
 
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
-                shooter.setTargetRPM(Shooter.staticRPM);
-//                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
-//                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+//                shooter.setTargetRPM(Shooter.staticRPM);
+                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
                 shooter.updateShooterVelocity();
             }
             else {
-                shooter.turnOff();
+//                shooter.turnOff();
                 //or keep shooter on at a lower rpm
-//                shooter.turnOffRestingRpm();
+                shooter.turnOffRestingRpm();
             }
 
             //manual hood control TODO:REMOVE
-            if(gamepad2.right_bumper && !gamepad2.left_bumper && !pressed){
-                testPosition += increment;
-                pressed = true;
-            }
-            else if (gamepad2.left_bumper && !gamepad2.right_bumper && !pressed){
-                testPosition -= increment;
-                pressed = true;
-            }
-            else if (!gamepad2.right_bumper && !gamepad2.left_bumper && pressed){
-                pressed = false;
-            }
-
-            testPosition = Math.max(0, Math.min(testPosition, 0.36));
-
-            shooter.setHoodPosition(testPosition);
+//            if(gamepad2.right_bumper && !gamepad2.left_bumper && !pressed){
+//                testPosition += increment;
+//                pressed = true;
+//            }
+//            else if (gamepad2.left_bumper && !gamepad2.right_bumper && !pressed){
+//                testPosition -= increment;
+//                pressed = true;
+//            }
+//            else if (!gamepad2.right_bumper && !gamepad2.left_bumper && pressed){
+//                pressed = false;
+//            }
+//
+//            testPosition = Math.max(0, Math.min(testPosition, 0.36));
+//
+//            shooter.setHoodPosition(testPosition);
 
 
             //telemetry
@@ -107,6 +107,7 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("shooter velocity:", shooter.shooterLeftGetVelocity());
             telemetry.addData("current pose:", follower.pose());
 
+            telemetry.addData("current distance:", drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose()));
             telemetry.addData("currentGoal", drivetrain.getCurrentGoalPose());
 
 

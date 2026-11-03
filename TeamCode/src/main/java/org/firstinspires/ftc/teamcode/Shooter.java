@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 import static com.pedropathing.ivy.commands.Commands.instant;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 
+import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -10,13 +11,15 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
+@Configurable
 public class Shooter {
     private OpMode opMode;
     private DcMotor shooterLeft;
     private DcMotor shooterRight;
 
-    public static double staticRPM = 2000;
+    public static double staticRPM = 1935;
     private Servo gate;
     private Servo hood;
     private boolean isOn = false;
@@ -28,7 +31,7 @@ public class Shooter {
     public static double TICKS_PER_SECOND_TO_RPM = 60.0 / 28.0; //inverse of above
 
     public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
-    public static double TARGET_RPM_TOLERANCE = 50;
+    public static double TARGET_RPM_TOLERANCE = 10;
     public static double LOWER_THRESHOLD_RPM_OFFSET = 80;
 
     //.setVelocity PIDF values
@@ -44,10 +47,10 @@ public class Shooter {
     //hood variables
     public static double HOOD_OFFSET = 0.01; //offset so the hood is in the right place
     public static double HOOD_MAX_POSITION = 0.36;
-
+t
     //regression variables
     public static double REGRESSION_RPM_OFFSET = 0;
-    public static double REGRESSION_RESTING_RPM = 2800; //lower rpm to keep the shooter running at
+    public static double REGRESSION_RESTING_RPM = 1800; //lower rpm to keep the shooter running at
 
 
 
@@ -152,13 +155,13 @@ public class Shooter {
         currentGamepad.copy(gamepad);
     }
 
-    //regression calculation methods TODO: make regessions
+    //regression calculation methods
     public double calculateRPMRegression(double distance){
-        return 0.0;
+        return Range.clip(0.00465905 * Math.pow(distance, 4) - 0.796831 * Math.pow(distance, 3) + 50.52094 * Math.pow(distance, 2) - 1404.44127 * distance + 16337.332, 1800, 2050);
     }
 
     public double calculateHoodRegression(double distance){
-        return 0.0;
+        return Range.clip(0.00000421318 * Math.pow(distance, 4) - 0.00070762 * Math.pow(distance, 3) + 0.0432085 * Math.pow(distance, 2) - 1.12867 * distance + 10.76655, 0.01, 0.29);
     }
 
     //variable getters
