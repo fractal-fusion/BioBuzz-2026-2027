@@ -132,6 +132,9 @@ public class productionOpmode extends LinearOpMode {
             //drivetrain updates
             drivetrain.updateCurrentGoalPose(follower.pose());
 
+            //update follower on panels
+            Drawing.drawDebug(follower);
+
             telemetry.update();
 
         }
