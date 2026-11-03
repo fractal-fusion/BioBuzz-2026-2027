@@ -1,6 +1,10 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+
+import com.pedropathing.ivy.Command;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -83,6 +87,24 @@ public class Intake {
     }
     public boolean isRampModeOn(){
         return rampMode;
+    }
+
+    //AUTO COMMANDS
+
+    public Command putDownRamp(){
+        return instant(() -> ramp.setPosition(RAMP_DOWN_POSITION));
+    }
+
+    public Command putUpRamp(){
+        return instant(() -> ramp.setPosition(RAMP_UP_POSITION));
+    }
+
+    public Command turnOnIntake(){
+        return instant(() -> pollenIntake.setPower(INTAKE_SPEED));
+    }
+
+    public Command turnOnTransfer(double speed) {
+        return instant(() -> pollenTransfer.setPower(speed));
     }
 
 //    public void intakeNectar()

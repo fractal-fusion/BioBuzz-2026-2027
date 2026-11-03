@@ -187,11 +187,19 @@ public class Shooter {
 
     //AUTO COMMANDS
 
-    public Command turnOnShooter(double target) {
+    public Command setRPM(double target) {
         return sequential(
                 instant(() -> setTargetRPM(target)),
                 instant(this::updateShooterVelocity)
         );
+    }
+
+    public Command openGate(){
+        return instant(() -> gate.setPosition(GATE_OPEN_POSITION));
+    }
+
+    public Command closeGate(){
+        return instant(() -> gate.setPosition(GATE_CLOSED_POSITION));
     }
 
 }

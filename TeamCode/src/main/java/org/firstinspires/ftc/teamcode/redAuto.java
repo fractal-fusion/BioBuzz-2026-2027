@@ -5,14 +5,8 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
 
 @Configurable
@@ -31,7 +25,7 @@ public class redAuto extends LinearOpMode {
         // Compose: raise the arm, wait 200ms, then open the claw
 
         Command autoSequence = sequential(
-            shooter.turnOnShooter(3000)
+            shooter.setRPM(3000)
         );
         waitForStart();
 
