@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.pedropathing.math.Pose;
+import com.pedropathing.math.Vector;
+import com.pedropathing.math.Vector2D;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -131,6 +133,25 @@ public class Drivetrain {
     }
 
     //odometry methods for calculating values
+    public Pose calculatePollenShooterPose(Pose robotPose, double offsetXInches, double offsetYInches){
+
+        //create an offset pose
+        double x = robotPose.x() + offsetXInches;
+        double y = robotPose.y() + offsetYInches;
+
+        //make the center of rotation the center of the robot
+        double cx = robotPose.x();
+        double cy = robotPose.y();
+
+        //rotate the offset pose by the rotation of the robot
+        double headingRadians = robotPose.heading();
+        double shooterX = cx + (x - cx) * Math.cos(headingRadians) - (y - cy) * Math.sin(headingRadians);
+        double shooterY = cy + (x - cx) * Math.sin(headingRadians) + (y - cy) * Math.cos(headingRadians);
+
+        return new Pose(shooterX, shooterY, robotPose.heading());
+    }
+
+
     public double calculateOdoGoalBearing(Pose robotPose, Pose goalPose) {
         double vectorY = goalPose.y() - robotPose.y();
         double vectorX = goalPose.x() - robotPose.x();
@@ -161,6 +182,7 @@ public class Drivetrain {
             return error * primaryP;
         }
     }
+
 
     //goal pose methods since there's two we need to switch between depending on position
     public void updateCurrentGoalPose(Pose currentPose){

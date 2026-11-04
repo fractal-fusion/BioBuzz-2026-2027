@@ -2,7 +2,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.pedropathing.ivy.commands.Commands.instant;
-import static com.pedropathing.ivy.groups.Groups.sequential;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ivy.Command;
@@ -33,7 +32,7 @@ public class Intake {
     private boolean rampMode = false;
 
     public static final double INTAKE_SPEED = 1; // change this to speed up or slow down intakes
-    public static double TRANSFER_SPEED = 1;
+    public static double SLOW_INTAKE_SPEED = 0.6; //lower shooting power so the PIDF can compensate
     private OpMode opMode;
 
     public Intake(OpMode opmode)
@@ -54,7 +53,12 @@ public class Intake {
     public void intakePollen()
     {
             pollenIntake.setPower(INTAKE_SPEED);
-            pollenTransfer.setPower(TRANSFER_SPEED);
+            pollenTransfer.setPower(INTAKE_SPEED);
+    }
+
+    public void intakePollenSlow(){
+        pollenIntake.setPower(SLOW_INTAKE_SPEED);
+        pollenTransfer.setPower(SLOW_INTAKE_SPEED);
     }
 
     public void outtakePollen()

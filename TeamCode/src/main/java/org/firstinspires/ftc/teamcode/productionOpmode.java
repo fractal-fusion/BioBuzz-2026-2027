@@ -41,7 +41,7 @@ public class productionOpmode extends LinearOpMode {
             //GAMEPAD 1 CONTROLS
             if (gamepad1.a){
                 //autoalign
-                drivetrain.driveAutoAlign(gamepad1, drivetrain.autoAlignTwoStageProportionalController(-drivetrain.calculateOdoGoalBearing(follower.pose(), drivetrain.getCurrentGoalPose())));
+                drivetrain.driveAutoAlign(gamepad1, drivetrain.autoAlignTwoStageProportionalController(-drivetrain.calculateOdoGoalBearing(drivetrain.calculatePollenShooterPose(follower.pose(), Shooter.POLLEN_X_OFFSET, Shooter.POLLEN_Y_OFFSET), drivetrain.getCurrentGoalPose())));
             }
             else if (gamepad1.x){
                 drivetrain.resetIMU();
@@ -61,8 +61,11 @@ public class productionOpmode extends LinearOpMode {
             if (gamepad2.a){
                 if (!shooter.isOn()) {
                     shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+                    intake.intakePollen();
                 }
-                intake.intakePollen();
+                else {
+                    intake.intakePollenSlow();
+                }
             }
             else if (gamepad2.b){
                 intake.outtakePollen();
@@ -82,6 +85,7 @@ public class productionOpmode extends LinearOpMode {
 //                shooter.turnOff();
                 //or keep shooter on at a lower rpm
                 shooter.turnOffRestingRpm();
+                shooter.setHoodPosition(0);
             }
 
             //manual hood control TODO:REMOVE
