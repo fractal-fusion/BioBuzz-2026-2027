@@ -49,12 +49,12 @@ public class Shooter {
     public static double HOOD_MAX_POSITION = 0.36;
 
     //regression variables
-    public static double REGRESSION_RPM_OFFSET = -300;
+    public static double REGRESSION_RPM_OFFSET = 0;
     public static double REGRESSION_RESTING_RPM = 1800; //lower rpm to keep the shooter running at
 
     //shooter position offset for autoalign
-    public static double POLLEN_X_OFFSET = -3.25;
-    public static double POLLEN_Y_OFFSET = 0;
+    public static double POLLEN_X_OFFSET = 0;
+    public static double POLLEN_Y_OFFSET = 5;
 
 
 
@@ -161,11 +161,11 @@ public class Shooter {
 
     //regression calculation methods
     public double calculateRPMRegression(double distance){
-        return Range.clip(0.00465905 * Math.pow(distance, 4) - 0.796831 * Math.pow(distance, 3) + 50.52094 * Math.pow(distance, 2) - 1404.44127 * distance + 16337.332, 1800, 2050);
+        return Range.clip(0.0000423963 * Math.pow(distance, 4) - 0.0069645 * Math.pow(distance, 3) + 0.387821 * Math.pow(distance, 2) - 5.55246 * distance + 1502.84812, 1520, 1620);
     }
 
     public double calculateHoodRegression(double distance){
-        return Range.clip(0.00000421318 * Math.pow(distance, 4) - 0.00070762 * Math.pow(distance, 3) + 0.0432085 * Math.pow(distance, 2) - 1.12867 * distance + 10.76655, 0.01, 0.29);
+        return Range.clip(0.000000605274 * Math.pow(distance, 4) - 0.000105842 * Math.pow(distance, 3) + 0.0065738 * Math.pow(distance, 2) - 0.166008 * distance + 1.6127, 0.00, 0.31);
     }
 
     //variable getters
