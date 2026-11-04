@@ -2,6 +2,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import static com.pedropathing.ivy.commands.Commands.instant;
+import static com.pedropathing.ivy.groups.Groups.parallel;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.ivy.Command;
@@ -105,8 +106,19 @@ public class Intake {
     }
 
     public Command turnOnIntake(){
-        return instant(() -> pollenIntake.setPower(INTAKE_SPEED));
+        return parallel(
+                instant(() -> pollenIntake.setPower(INTAKE_SPEED)),
+                instant(() -> pollenTransfer.setPower(INTAKE_SPEED))
+        );
     }
+
+    public Command turnOnIntakeSlow(){
+        return parallel(
+                instant(() -> pollenIntake.setPower(SLOW_INTAKE_SPEED)),
+                instant(() -> pollenTransfer.setPower(SLOW_INTAKE_SPEED))
+        );
+    }
+
 
     public Command turnOnTransfer(double speed) {
         return instant(() -> pollenTransfer.setPower(speed));

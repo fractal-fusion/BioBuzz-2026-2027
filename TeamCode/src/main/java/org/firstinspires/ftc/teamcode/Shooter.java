@@ -50,7 +50,7 @@ public class Shooter {
 
     //regression variables
     public static double REGRESSION_RPM_OFFSET = 0;
-    public static double REGRESSION_RESTING_RPM = 1800; //lower rpm to keep the shooter running at
+    public static double REGRESSION_RESTING_RPM = 1500; //lower rpm to keep the shooter running at
 
     //shooter position offset for autoalign
     public static double POLLEN_X_OFFSET = 0;
@@ -199,6 +199,10 @@ public class Shooter {
                 instant(() -> setTargetRPM(target)),
                 instant(this::updateShooterVelocity)
         );
+    }
+
+    public Command setHood(double target){
+        return instant(() -> setHoodPosition(target));
     }
 
     public Command openGate(){
