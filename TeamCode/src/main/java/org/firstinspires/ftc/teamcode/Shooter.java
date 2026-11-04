@@ -49,11 +49,11 @@ public class Shooter {
     public static double HOOD_MAX_POSITION = 0.36;
 
     //regression variables
-    public static double REGRESSION_RPM_OFFSET = 0;
+    public static double REGRESSION_RPM_OFFSET = -300;
     public static double REGRESSION_RESTING_RPM = 1800; //lower rpm to keep the shooter running at
 
     //shooter position offset for autoalign
-    public static double POLLEN_X_OFFSET = 5;
+    public static double POLLEN_X_OFFSET = -3.25;
     public static double POLLEN_Y_OFFSET = 0;
 
 

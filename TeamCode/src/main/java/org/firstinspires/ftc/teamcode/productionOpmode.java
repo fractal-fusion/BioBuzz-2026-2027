@@ -54,6 +54,9 @@ public class productionOpmode extends LinearOpMode {
             if (gamepad1.dpad_down){
                 follower.setPose(TeleopPoseManager.RED_BOTTOM_LEFT_POSE);
             }
+            else if (gamepad1.dpad_right){
+                follower.setPose(TeleopPoseManager.RED_BOTTOM_RIGHT_POSE);
+            }
 
             //GAMEPAD 2 CONTROLS
             intake.toggleRampMode(gamepad2);
@@ -77,7 +80,7 @@ public class productionOpmode extends LinearOpMode {
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
 //                shooter.setTargetRPM(Shooter.staticRPM);
-                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
                 shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
                 shooter.updateShooterVelocity();
             }
