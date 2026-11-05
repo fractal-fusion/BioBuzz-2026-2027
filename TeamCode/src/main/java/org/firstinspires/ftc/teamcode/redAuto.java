@@ -24,12 +24,17 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 public class redAuto extends LinearOpMode {
     //define poses
     private final PoseFactory poseFactory = PoseFactory.degrees();
-    public static double FIRST_FLOWER_Y = 47.6335;
+    public static double FIRST_FLOWER_Y = 48.6335;
     public static double FIRST_FLOWER_X = 5.9;
 
+    public static double SECOND_FLOWER_Y = 132.0241;
+    public static double SECOND_FLOWER_X = 39.1517;
+
     public static double FIRST_REV_UP_WAIT_TIME_MS = 1850;
-    public static double REV_UP_WAIT_TIME_MS = 500;
+    public static double REV_UP_WAIT_TIME_MS = 1000;
     public static double SHOOTING_WAIT_TIME_MS = 500;
+    public static double SHOOTING_WAIT_TIME_MS_2 = 5500;
+    public static double SECOND_FLOWER_WAIT_TIME_MS = 300;
 
     private final Pose start = poseFactory.of(56, 11.26, 90);
     private final Pose goToIntakeFirstFlowerStart = poseFactory.of(56, 11.26, 90);
@@ -41,11 +46,11 @@ public class redAuto extends LinearOpMode {
 
     private final Pose goToShootFirstFlower = poseFactory.of(52.2425, 124.9408, 270);
     private final Pose goToShootFirstFlowerControl1 = poseFactory.of(28.4159, 53.9977, 0);
-    private final Pose goToShootFirstFlowerControl2 = poseFactory.of(12.8901, 95.9933, 0);
-    private final Pose intakeSecondFlower = poseFactory.of(49.1517, 130.1241, 270);
-    private final Pose intakeSecondFlowerControl1 = poseFactory.of(46.8084, 126.3793, 0);
+    private final Pose goToShootFirstFlowerControl2 = poseFactory.of(7.92, 94.75, 0);
+    private final Pose intakeSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, 270);
+    private final Pose intakeSecondFlowerControl1 = poseFactory.of(46.8156, 124.4848, 0);
     private final Pose goToShootSecondFlowerStart = poseFactory.of(49.1517, 130.1241, 270);
-    private final Pose goToShootSecondFlower = poseFactory.of(50.2807, 126.966, 280);
+    private final Pose goToShootSecondFlower = poseFactory.of(50.2807, 126.966, 270);
     private final Pose park = poseFactory.of(13.232, 116.4468, 177.7608);
     private final Pose parkControl1 = poseFactory.of(52.0519, 114.9289, 0);
 
@@ -117,16 +122,37 @@ public class redAuto extends LinearOpMode {
             //go to shoot first flower
             follow(follower, backUpFromFirstFlower()),
             follow(follower, goToShootFirstFlower()),
+            shooter.openGate(),
 
             //shoot first flower
-            shooter.setRPM(1581),
-            shooter.setHood(0.26),
+            shooter.setRPM(1590),
+            shooter.setHood(0.233),
+            waitMs(REV_UP_WAIT_TIME_MS),
+            intake.turnOnIntakeSlow(),
+            waitMs(SHOOTING_WAIT_TIME_MS_2),
+            shooter.closeGate(),
+
+            //go to intake second flower
+            follow(follower, intakeSecondFlower()),
+
+            //turn on intake and wait to intake balls
+            intake.turnOnIntake(),
+            waitMs(1000),
+
+            //go to shoot second flower
+            follow(follower, goToShootSecondFlower()),
+
+            //shoot second flower
+            shooter.setRPM(1590),
+            shooter.setHood(0.233),
             shooter.openGate(),
             waitMs(REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
-            waitMs(SHOOTING_WAIT_TIME_MS),
-            shooter.closeGate()
+            waitMs(SHOOTING_WAIT_TIME_MS_2),
+            shooter.closeGate(),
 
+            //goes to park
+            follow(follower, park())
         );
         waitForStart();
 
