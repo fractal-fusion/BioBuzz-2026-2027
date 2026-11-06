@@ -25,7 +25,7 @@ public class Intake {
 
     //constant variables for ramp
     public static double RAMP_UP_POSITION = 0.37;
-    public static double RAMP_DOWN_POSITION = 0.12;
+    public static double RAMP_DOWN_POSITION = 0.14;
 
     //gamepad variables for toggling ramp mode
     private Gamepad currentGamepad = new Gamepad();
@@ -124,6 +124,12 @@ public class Intake {
         return instant(() -> pollenTransfer.setPower(speed));
     }
 
+    public Command turnOffIntake(){
+        return parallel(
+                instant(() -> pollenIntake.setPower(0)),
+                instant(() -> pollenTransfer.setPower(0))
+        );
+    }
 //    public void intakeNectar()
 //    {
 //        nectarTransferFront.setPower(INTAKE_SPEED);

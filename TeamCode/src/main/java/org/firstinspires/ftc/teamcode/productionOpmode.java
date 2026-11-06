@@ -117,7 +117,7 @@ public class productionOpmode extends LinearOpMode {
             telemetry.addData("shooter regression hood:", shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
 
             telemetry.addData("current pose:", follower.pose());
-
+            telemetry.addData("current angle:", Math.toDegrees(follower.pose().heading()));
             telemetry.addData("current distance:", drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose()));
             telemetry.addData("currentGoal", drivetrain.getCurrentGoalPose());
 

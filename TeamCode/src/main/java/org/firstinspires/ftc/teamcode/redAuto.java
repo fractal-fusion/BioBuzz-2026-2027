@@ -25,16 +25,23 @@ public class redAuto extends LinearOpMode {
     //define poses
     private final PoseFactory poseFactory = PoseFactory.degrees();
     public static double FIRST_FLOWER_Y = 48.6335;
-    public static double FIRST_FLOWER_X = 5.9;
+    public static double FIRST_FLOWER_X = 6.4;
 
-    public static double SECOND_FLOWER_Y = 132.0241;
-    public static double SECOND_FLOWER_X = 39.1517;
+    public static double SECOND_FLOWER_Y = 133.65;
+    public static double SECOND_FLOWER_X = 40.8;
+    public static double SECOND_SHOOT_Y = 133.25;
+    public static double SECOND_SHOOT_X = 55.72;
 
-    public static double FIRST_REV_UP_WAIT_TIME_MS = 1850;
-    public static double REV_UP_WAIT_TIME_MS = 1000;
+    public static double SHOOT_SECOND_FLOWER_ANGLE = 260;
+
+    public static double FIRST_REV_UP_WAIT_TIME_MS = 3000;
+    public static double REV_UP_WAIT_TIME_MS = 1500;
+    public static double TIP_WAIT_TIME_MS = 2500;
     public static double SHOOTING_WAIT_TIME_MS = 500;
-    public static double SHOOTING_WAIT_TIME_MS_2 = 5500;
-    public static double SECOND_FLOWER_WAIT_TIME_MS = 300;
+    public static double SHOOTING_WAIT_TIME_MS_2 = 500;
+
+    public static double FIRST_FLOWER_WAIT_TIME_MS = 1000;
+    public static double SECOND_FLOWER_WAIT_TIME_MS = 1000;
 
     private final Pose start = poseFactory.of(56, 11.26, 90);
     private final Pose goToIntakeFirstFlowerStart = poseFactory.of(56, 11.26, 90);
@@ -44,14 +51,16 @@ public class redAuto extends LinearOpMode {
     private final Pose backUpFromFirstFlower = poseFactory.of(17.5657, 46.493, 0);
     private final Pose goToShootFirstFlowerStart = poseFactory.of(17.5657, 46.493, 0);
 
-    private final Pose goToShootFirstFlower = poseFactory.of(52.2425, 124.9408, 270);
+    private final Pose goToShootFirstFlower = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
     private final Pose goToShootFirstFlowerControl1 = poseFactory.of(28.4159, 53.9977, 0);
-    private final Pose goToShootFirstFlowerControl2 = poseFactory.of(7.92, 94.75, 0);
+    private final Pose goToShootFirstFlowerControl2 = poseFactory.of(10.4061, 95.461, 0);
+//    private final Pose backUpToShootFirstFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, SECOND_FLOWER_ANGLE);
     private final Pose intakeSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, 270);
-    private final Pose intakeSecondFlowerControl1 = poseFactory.of(46.8156, 124.4848, 0);
+    private final Pose intakeSecondFlowerControl1 = poseFactory.of(48.2351, 111.8873, 0);
     private final Pose goToShootSecondFlowerStart = poseFactory.of(49.1517, 130.1241, 270);
-    private final Pose goToShootSecondFlower = poseFactory.of(50.2807, 126.966, 270);
-    private final Pose park = poseFactory.of(13.232, 116.4468, 177.7608);
+    private final Pose goToShootSecondFlower = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
+    private final Pose goToShootSecondFlowerControl1 = poseFactory.of(54.0167, 119.8707, 0);
+    private final Pose park = poseFactory.of(12.232, 118.4468, 177.7608);
     private final Pose parkControl1 = poseFactory.of(52.0519, 114.9289, 0);
 
     //initialize paths from poses
@@ -72,12 +81,17 @@ public class redAuto extends LinearOpMode {
         return Paths.curve(goToShootFirstFlowerStart, goToShootFirstFlowerControl1, goToShootFirstFlowerControl2, goToShootFirstFlower).linear(goToShootFirstFlowerStart, goToShootFirstFlower);
     }
 
+//    public Path backUpToShootFirstFlower() {
+//        return Paths.line(goToShootFirstFlower, backUpToShootFirstFlower).constant(backUpToShootFirstFlower);
+//    }
+
+
     public Path intakeSecondFlower() {
         return Paths.curve(goToShootFirstFlower, intakeSecondFlowerControl1, intakeSecondFlower).constant(intakeSecondFlower);
     }
 
     public Path goToShootSecondFlower() {
-        return Paths.line(goToShootSecondFlowerStart, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower);
+        return Paths.curve(goToShootSecondFlowerStart, goToShootSecondFlowerControl1, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower);
     }
 
     public Path park() {
@@ -101,8 +115,8 @@ public class redAuto extends LinearOpMode {
 
         Command autoSequence = sequential(
             //shoot preloads
-            shooter.setRPM(1581),
-            shooter.setHood(0.2955),
+            shooter.setRPM(1576),
+            shooter.setHood(0.262),
             shooter.openGate(),
             waitMs(FIRST_REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
@@ -117,16 +131,19 @@ public class redAuto extends LinearOpMode {
 
             //turn on intake and wait for balls to be intaked
             intake.turnOnIntake(),
-            waitMs(1000),
+            waitMs(FIRST_FLOWER_WAIT_TIME_MS),
 
             //go to shoot first flower
             follow(follower, backUpFromFirstFlower()),
             follow(follower, goToShootFirstFlower()),
+            intake.turnOffIntake(),
+//            follow(follower, backUpToShootFirstFlower()),
             shooter.openGate(),
 
             //shoot first flower
-            shooter.setRPM(1590),
-            shooter.setHood(0.233),
+            shooter.setRPM(1575),
+            shooter.setHood(0.262),
+            waitMs(TIP_WAIT_TIME_MS),
             waitMs(REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
             waitMs(SHOOTING_WAIT_TIME_MS_2),
@@ -137,18 +154,18 @@ public class redAuto extends LinearOpMode {
 
             //turn on intake and wait to intake balls
             intake.turnOnIntake(),
-            waitMs(1000),
+            waitMs(SECOND_FLOWER_WAIT_TIME_MS),
 
             //go to shoot second flower
             follow(follower, goToShootSecondFlower()),
 
             //shoot second flower
-            shooter.setRPM(1590),
-            shooter.setHood(0.233),
+            shooter.setRPM(1575),
+            shooter.setHood(0.262),
             shooter.openGate(),
             waitMs(REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
-            waitMs(SHOOTING_WAIT_TIME_MS_2),
+            waitMs(SHOOTING_WAIT_TIME_MS),
             shooter.closeGate(),
 
             //goes to park
