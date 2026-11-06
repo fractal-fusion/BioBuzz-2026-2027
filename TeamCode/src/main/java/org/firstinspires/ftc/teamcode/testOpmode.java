@@ -18,7 +18,7 @@ public class testOpmode extends LinearOpMode {
     public static String testMotor2Name = "testmotor2";
 
 
-    public static String testServoName = "intakeramp";
+    public static String testServoName = "hood";
 
     public double testPosition = 0;
     public double increment = 0.01;
@@ -50,7 +50,7 @@ public class testOpmode extends LinearOpMode {
 
         testServo = hardwareMap.get(Servo.class, testServoName);
 
-//        testServo.setDirection(Servo.Direction.REVERSE);
+        testServo.setDirection(Servo.Direction.REVERSE);
 
 
         waitForStart();

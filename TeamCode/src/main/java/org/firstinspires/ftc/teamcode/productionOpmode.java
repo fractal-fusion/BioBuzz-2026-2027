@@ -81,7 +81,7 @@ public class productionOpmode extends LinearOpMode {
             if (shooter.isOn()){
 //                shooter.setTargetRPM(Shooter.staticRPM);
                 shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
-                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_HOOD_OFFSET);
                 shooter.updateShooterVelocity();
             }
             else {
