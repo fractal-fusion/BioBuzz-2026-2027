@@ -1,6 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Paint;
+
 import com.bylazar.configurables.annotations.Configurable;
+import com.bylazar.telemetry.JoinedTelemetry;
+import com.bylazar.telemetry.PanelsTelemetry;
+import com.bylazar.telemetry.TelemetryManager;
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,6 +18,8 @@ public class productionOpmode extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        //panels telemetry
+        TelemetryManager panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
         //manual hood variables //TODO: REMOVE
         double increment = 0.01;
@@ -111,6 +118,9 @@ public class productionOpmode extends LinearOpMode {
 
             //telemetry
             telemetry.addData("servopos:", testPosition);
+
+            panelsTelemetry.addData("shooter velocity", shooter.shooterLeftGetVelocity());
+            panelsTelemetry.addData("target velocity", shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
             telemetry.addData("shooter velocity:", shooter.shooterLeftGetVelocity());
 
             telemetry.addData("shooter regression velocity:", shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
@@ -126,6 +136,7 @@ public class productionOpmode extends LinearOpMode {
 
             //update all telemetry
             telemetry.update();
+            panelsTelemetry.update(telemetry);
 
             //update drivetrain imu for field centric
             drivetrain.updateIMU();

@@ -33,7 +33,7 @@ public class Intake {
     private boolean rampMode = false;
 
     public static final double INTAKE_SPEED = 1; // change this to speed up or slow down intakes
-    public static double SLOW_INTAKE_SPEED = 0.78; //lower shooting power so the PIDF can compensate
+    public static double SLOW_INTAKE_SPEED = 1; //lower shooting power so the PIDF can compensate
     private OpMode opMode;
 
     public Intake(OpMode opmode)
