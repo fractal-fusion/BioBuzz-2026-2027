@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.bylazar.configurables.annotations.Configurable;
+import com.pedropathing.math.Pose;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -37,8 +38,8 @@ public class testOpmode extends LinearOpMode {
 
         //Intake intake = new Intake(this);
 
-//        Shooter shooter = new Shooter(this);
-//        Drivetrain drivetrain = new Drivetrain( this);
+        Shooter shooter = new Shooter(this);
+        Drivetrain drivetrain = new Drivetrain( this);
         Intake intake = new Intake(this);
 
 //        testServo1 = hardwareMap.get(CRServo.class, testServo1Name);
@@ -100,6 +101,8 @@ public class testOpmode extends LinearOpMode {
             testServo.setPosition(testPosition);
 
             telemetry.addData("servopos:", testPosition);
+            telemetry.addData("shooter regression velocity:", shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(new Pose(55.72, 133.25), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
+            telemetry.addData("shooter regression hood:", shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(new Pose(55.72, 133.25), drivetrain.getCurrentGoalPose())));
             telemetry.update();
 
         }

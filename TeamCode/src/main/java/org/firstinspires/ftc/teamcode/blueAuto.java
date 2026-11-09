@@ -25,23 +25,24 @@ public class blueAuto extends LinearOpMode {
     //define poses
     private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);
     public static double FIRST_FLOWER_Y = 48.6335;
-    public static double FIRST_FLOWER_X = 6.4;
+    public static double FIRST_FLOWER_X = 6.4 - 0.3;
 
     public static double SECOND_FLOWER_Y = 133.65;
-    public static double SECOND_FLOWER_X = 40.8;
+    public static double SECOND_FLOWER_X = 41.2;
     public static double SECOND_SHOOT_Y = 133.25;
     public static double SECOND_SHOOT_X = 55.72;
 
     public static double SHOOT_SECOND_FLOWER_ANGLE = 260;
 
     public static double FIRST_REV_UP_WAIT_TIME_MS = 3000;
-    public static double REV_UP_WAIT_TIME_MS = 1500;
+    public static double SECOND_REV_UP_WAIT_TIME_MS = 1500;
+    public static double THIRD_REV_UP_WAIT_TIME_MS = 3000;
     public static double TIP_WAIT_TIME_MS = 2500;
     public static double SHOOTING_WAIT_TIME_MS = 500;
-    public static double SHOOTING_WAIT_TIME_MS_2 = 500;
+    public static double SHOOTING_WAIT_TIME_MS_2 = 750;
 
     public static double FIRST_FLOWER_WAIT_TIME_MS = 1000;
-    public static double SECOND_FLOWER_WAIT_TIME_MS = 1000;
+    public static double SECOND_FLOWER_WAIT_TIME_MS = 1500;
 
     private final Pose start = poseFactory.of(56, 11.26, 90);
     private final Pose goToIntakeFirstFlowerStart = poseFactory.of(56, 11.26, 90);
@@ -115,8 +116,8 @@ public class blueAuto extends LinearOpMode {
 
         Command autoSequence = sequential(
             //shoot preloads
-            shooter.setRPM(1576),
-            shooter.setHood(0.262),
+            shooter.setRPM(1618),
+            shooter.setHood(0.285),
             shooter.openGate(),
             waitMs(FIRST_REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
@@ -141,10 +142,10 @@ public class blueAuto extends LinearOpMode {
             shooter.openGate(),
 
             //shoot first flower
-            shooter.setRPM(1575),
-            shooter.setHood(0.262),
+            shooter.setRPM(1603),
+            shooter.setHood(0.27),
             waitMs(TIP_WAIT_TIME_MS),
-            waitMs(REV_UP_WAIT_TIME_MS),
+            waitMs(SECOND_REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
             waitMs(SHOOTING_WAIT_TIME_MS_2),
             shooter.closeGate(),
@@ -160,10 +161,10 @@ public class blueAuto extends LinearOpMode {
             follow(follower, goToShootSecondFlower()),
 
             //shoot second flower
-            shooter.setRPM(1575),
-            shooter.setHood(0.262),
+            shooter.setRPM(1603),
+            shooter.setHood(0.27),
             shooter.openGate(),
-            waitMs(REV_UP_WAIT_TIME_MS),
+            waitMs(THIRD_REV_UP_WAIT_TIME_MS),
             intake.turnOnIntakeSlow(),
             waitMs(SHOOTING_WAIT_TIME_MS),
             shooter.closeGate(),
