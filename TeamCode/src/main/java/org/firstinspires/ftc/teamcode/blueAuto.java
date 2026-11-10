@@ -27,10 +27,11 @@ public class blueAuto extends LinearOpMode {
     private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);
     public static double FIRST_FLOWER_Y = 48.6335;
     public static double FIRST_FLOWER_X = 6.4 - 0.3;
+    public static double SECOND_FLOWER_Y = 131.5;
+    public static double SECOND_FLOWER_X = 42.2;
+    public static double SHIMMY_OFFSET = 1;
 
-    public static double SECOND_FLOWER_Y = 133.65;
-    public static double SECOND_FLOWER_X = 41.2;
-    public static double SECOND_SHOOT_Y = 133.25;
+    public static double SECOND_SHOOT_Y = 131.5;
     public static double SECOND_SHOOT_X = 55.72;
 
     public static double SHOOT_SECOND_FLOWER_ANGLE = 260;
@@ -50,6 +51,8 @@ public class blueAuto extends LinearOpMode {
     private final Pose goToIntakeFirstFlower = poseFactory.of(17.2658, FIRST_FLOWER_Y, 0);
     private final Pose goToIntakeFirstFlowerControl1 = poseFactory.of(12.8992, 29.3762, 0);
     private final Pose intakeFirstFlower = poseFactory.of(FIRST_FLOWER_X, FIRST_FLOWER_Y, 0);
+    private final Pose shimmeyBackFirstFlower = poseFactory.of(FIRST_FLOWER_X + SHIMMY_OFFSET, FIRST_FLOWER_Y, 0);
+    private final Pose shimmeyForwardFirstFlower = poseFactory.of(FIRST_FLOWER_X, FIRST_FLOWER_Y, 0);
     private final Pose backUpFromFirstFlower = poseFactory.of(17.5657, 46.493, 0);
     private final Pose goToShootFirstFlowerStart = poseFactory.of(17.5657, 46.493, 0);
 
@@ -58,6 +61,8 @@ public class blueAuto extends LinearOpMode {
     private final Pose goToShootFirstFlowerControl2 = poseFactory.of(10.4061, 95.461, 0);
 //    private final Pose backUpToShootFirstFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, SECOND_FLOWER_ANGLE);
     private final Pose intakeSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, 270);
+    private final Pose shimmyBackSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y - SHIMMY_OFFSET, 270);
+    private final Pose shimmyForwardSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, 270);
     private final Pose intakeSecondFlowerControl1 = poseFactory.of(48.2351, 111.8873, 0);
     private final Pose goToShootSecondFlowerStart = poseFactory.of(49.1517, 130.1241, 270);
     private final Pose goToShootSecondFlower = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
@@ -75,6 +80,14 @@ public class blueAuto extends LinearOpMode {
         return Paths.line(goToIntakeFirstFlower, intakeFirstFlower).reverseTangent();
     }
 
+    public Path shimmeyBackFirstFlower() {
+        return Paths.line(intakeFirstFlower, shimmeyBackFirstFlower).constant(shimmeyBackFirstFlower);
+    }
+
+    public Path shimmeyForwardFirstFlower() {
+        return Paths.line(shimmeyBackFirstFlower, shimmeyForwardFirstFlower).constant(shimmeyForwardFirstFlower);
+    }
+
     public Path backUpFromFirstFlower() {
         return Paths.line(intakeFirstFlower, backUpFromFirstFlower).tangent();
     }
@@ -86,10 +99,15 @@ public class blueAuto extends LinearOpMode {
 //    public Path backUpToShootFirstFlower() {
 //        return Paths.line(goToShootFirstFlower, backUpToShootFirstFlower).constant(backUpToShootFirstFlower);
 //    }
-
-
     public Path intakeSecondFlower() {
         return Paths.curve(goToShootFirstFlower, intakeSecondFlowerControl1, intakeSecondFlower).constant(intakeSecondFlower);
+    }
+    public Path shimmeyBackSecondFlower() {
+        return Paths.line(intakeSecondFlower, shimmyBackSecondFlower).constant(shimmyBackSecondFlower);
+    }
+
+    public Path shimmeyForwardSecondFlower() {
+        return Paths.line(shimmyBackSecondFlower, shimmyForwardSecondFlower).constant(shimmyForwardSecondFlower);
     }
 
     public Path goToShootSecondFlower() {
@@ -130,13 +148,20 @@ public class blueAuto extends LinearOpMode {
 
                 //go to intake first flower
                 parallel(follow(follower, goToIntakeFirstFlower()),
-                            intake.putDownRamp()),
-                waitMs(500),
+                        sequential(
+//                                waitMs(2000),
+                                intake.putDownRampHalfway())
+                ),
+                intake.putDownRamp(),
+                waitMs(1000),
                 follow(follower, intakeFirstFlower()),
-
                 //turn on intake and wait for balls to be intaked
                 intake.turnOnIntake(),
                 waitMs(FIRST_FLOWER_WAIT_TIME_MS),
+                //shimmey
+                follow(follower, shimmeyBackFirstFlower()),
+                follow(follower, shimmeyForwardFirstFlower()),
+
 
                 //go to shoot first flower
                 follow(follower, backUpFromFirstFlower()),
@@ -156,10 +181,13 @@ public class blueAuto extends LinearOpMode {
 
                 //go to intake second flower
                 follow(follower, intakeSecondFlower()),
-
                 //turn on intake and wait to intake balls
                 intake.turnOnIntake(),
                 waitMs(SECOND_FLOWER_WAIT_TIME_MS),
+                //shimmey
+                follow(follower, shimmeyBackSecondFlower()),
+                follow(follower, shimmeyForwardSecondFlower()),
+
 
                 //go to shoot second flower
                 follow(follower, goToShootSecondFlower()),
