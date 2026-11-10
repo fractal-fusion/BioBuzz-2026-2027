@@ -40,7 +40,7 @@ public class blueAuto extends LinearOpMode {
     public static double SECOND_REV_UP_WAIT_TIME_MS = 1500;
     public static double THIRD_REV_UP_WAIT_TIME_MS = 3000;
     public static double TIP_WAIT_TIME_MS = 2500;
-    public static double SHOOTING_WAIT_TIME_MS = 500;
+    public static double SHOOTING_WAIT_TIME_MS = 750;
     public static double SHOOTING_WAIT_TIME_MS_2 = 750;
 
     public static double FIRST_FLOWER_WAIT_TIME_MS = 1000;
