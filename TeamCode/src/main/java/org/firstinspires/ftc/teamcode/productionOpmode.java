@@ -58,11 +58,33 @@ public class productionOpmode extends LinearOpMode {
             }
 
             //relocalization logic
-            if (gamepad1.dpad_down){
-                follower.setPose(TeleopPoseManager.RED_BOTTOM_LEFT_POSE);
+            if (TeleopPoseManager.currentTeam == TeleopPoseManager.Team.RED){
+                if (gamepad1.dpad_down){
+                    follower.setPose(TeleopPoseManager.RED_BOTTOM_LEFT_POSE);
+                }
+                else if (gamepad1.dpad_right){
+                    follower.setPose(TeleopPoseManager.RED_BOTTOM_RIGHT_POSE);
+                }
+                else if(gamepad1.dpad_left){
+                    follower.setPose(TeleopPoseManager.RED_TOP_LEFT_POSE);
+                }
+                else if(gamepad1.dpad_up){
+                    follower.setPose(TeleopPoseManager.RED_TOP_RIGHT_POSE);
+                }
             }
-            else if (gamepad1.dpad_right){
-                follower.setPose(TeleopPoseManager.RED_BOTTOM_RIGHT_POSE);
+            else if (TeleopPoseManager.currentTeam == TeleopPoseManager.Team.BLUE){
+                if (gamepad1.dpad_down){
+                    follower.setPose(TeleopPoseManager.BLUE_BOTTOM_LEFT_POSE);
+                }
+                else if (gamepad1.dpad_right){
+                    follower.setPose(TeleopPoseManager.BLUE_BOTTOM_RIGHT_POSE);
+                }
+                else if(gamepad1.dpad_left){
+                    follower.setPose(TeleopPoseManager.BLUE_TOP_LEFT_POSE);
+                }
+                else if(gamepad1.dpad_up){
+                    follower.setPose(TeleopPoseManager.BLUE_TOP_RIGHT_POSE);
+                }
             }
 
             //GAMEPAD 2 CONTROLS

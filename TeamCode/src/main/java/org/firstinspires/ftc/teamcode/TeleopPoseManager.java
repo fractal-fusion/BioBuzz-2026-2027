@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.pedropathing.ivy.commands.Commands.infinite;
+import static com.pedropathing.ivy.commands.Commands.instant;
+
 import com.pedropathing.api.PoseFactory;
+import com.pedropathing.ivy.Command;
 import com.pedropathing.math.Pose;
 
 public class TeleopPoseManager {
@@ -24,10 +28,10 @@ public class TeleopPoseManager {
     public static Pose RED_TOP_RIGHT_POSE = poseFactory.of(FIELD_WIDTH - BOT_HEIGHT/2, BOT_WIDTH/2, 0);
 
     //TODO: find these
-    public static Pose BLUE_BOTTOM_LEFT_POSE = poseFactory.of(BOT_HEIGHT/2, FIELD_HEIGHT - BOT_WIDTH/2, 180);
-    public static Pose BLUE_BOTTOM_RIGHT_POSE = poseFactory.of(BOT_HEIGHT/2, BOT_WIDTH/2, 180);
-    public static Pose BLUE_TOP_LEFT_POSE = poseFactory.of(FIELD_WIDTH - BOT_HEIGHT/2, FIELD_HEIGHT - BOT_WIDTH/2, 180);
-    public static Pose BLUE__TOP_RIGHT_POSE = poseFactory.of(FIELD_WIDTH - BOT_HEIGHT/2, BOT_WIDTH/2, 180);
+    public static Pose BLUE_BOTTOM_LEFT_POSE = RED_TOP_RIGHT_POSE.withHeading(Math.toRadians(180));
+    public static Pose BLUE_BOTTOM_RIGHT_POSE = RED_TOP_LEFT_POSE.withHeading(Math.toRadians(180));
+    public static Pose BLUE_TOP_LEFT_POSE = RED_BOTTOM_RIGHT_POSE.withHeading(Math.toRadians(180));
+    public static Pose BLUE_TOP_RIGHT_POSE = RED_BOTTOM_LEFT_POSE.withHeading(Math.toRadians(180));
 
 
     public enum Team {
@@ -35,6 +39,7 @@ public class TeleopPoseManager {
         BLUE,
         RED
     }
+    public static Team currentTeam = Team.RED;
     public static Pose currentPose = new Pose(0,0,0);
 
     //real coordinates for pedro calculation
@@ -56,16 +61,21 @@ public class TeleopPoseManager {
 
     //initalize and store the team-specific poses into the correct storage variables, as well as store the current pose
     public static void initializeTeleopPoses(Team team, Pose currentpose){
+        currentTeam = team;
 
-        if (team == Team.BLUE) {
+        if (currentTeam == Team.BLUE) {
             matchUpwardsGoalPose = BLUE_UPWARDS_GOAL_POSITION;
             matchDownwardsGoalPose = BLUE_DOWNWARDS_GOAL_POSITION;
         }
-        else if (team == Team.RED) {
+        else if (currentTeam == Team.RED) {
             matchUpwardsGoalPose = RED_UPWARDS_GOAL_POSITION;
             matchDownwardsGoalPose = RED_DOWNWARDS_GOAL_POSITION;
         }
 
         currentPose = currentpose;
+    }
+
+    public static Command initializeTeleop(Team team, Pose currentPose){
+        return infinite(()-> initializeTeleopPoses(team, currentPose));
     }
 }

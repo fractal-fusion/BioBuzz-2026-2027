@@ -113,63 +113,67 @@ public class redAuto extends LinearOpMode {
         follower.setPose(start);
 
 
-        Command autoSequence = sequential(
-            //shoot preloads
-            shooter.setRPM(1576),
-            shooter.setHood(0.262),
-            shooter.openGate(),
-            waitMs(FIRST_REV_UP_WAIT_TIME_MS),
-            intake.turnOnIntakeSlow(),
-            waitMs(SHOOTING_WAIT_TIME_MS),
-            shooter.closeGate(),
+        Command autoSequence =
+            parallel(
+                TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
+                sequential(
+                //shoot preloads
+                shooter.setRPM(1576),
+                shooter.setHood(0.262),
+                shooter.openGate(),
+                waitMs(FIRST_REV_UP_WAIT_TIME_MS),
+                intake.turnOnIntakeSlow(),
+                waitMs(SHOOTING_WAIT_TIME_MS),
+                shooter.closeGate(),
 
-            //go to intake first flower
-            parallel(follow(follower, goToIntakeFirstFlower()),
-                        intake.putDownRamp()),
-            waitMs(500),
-            follow(follower, intakeFirstFlower()),
+                //go to intake first flower
+                parallel(follow(follower, goToIntakeFirstFlower()),
+                            intake.putDownRamp()),
+                waitMs(500),
+                follow(follower, intakeFirstFlower()),
 
-            //turn on intake and wait for balls to be intaked
-            intake.turnOnIntake(),
-            waitMs(FIRST_FLOWER_WAIT_TIME_MS),
+                //turn on intake and wait for balls to be intaked
+                intake.turnOnIntake(),
+                waitMs(FIRST_FLOWER_WAIT_TIME_MS),
 
-            //go to shoot first flower
-            follow(follower, backUpFromFirstFlower()),
-            follow(follower, goToShootFirstFlower()),
-            intake.turnOffIntake(),
-//            follow(follower, backUpToShootFirstFlower()),
-            shooter.openGate(),
+                //go to shoot first flower
+                follow(follower, backUpFromFirstFlower()),
+                follow(follower, goToShootFirstFlower()),
+                intake.turnOffIntake(),
+    //            follow(follower, backUpToShootFirstFlower()),
+                shooter.openGate(),
 
-            //shoot first flower
-            shooter.setRPM(1575),
-            shooter.setHood(0.262),
-            waitMs(TIP_WAIT_TIME_MS),
-            waitMs(REV_UP_WAIT_TIME_MS),
-            intake.turnOnIntakeSlow(),
-            waitMs(SHOOTING_WAIT_TIME_MS_2),
-            shooter.closeGate(),
+                //shoot first flower
+                shooter.setRPM(1575),
+                shooter.setHood(0.262),
+                waitMs(TIP_WAIT_TIME_MS),
+                waitMs(REV_UP_WAIT_TIME_MS),
+                intake.turnOnIntakeSlow(),
+                waitMs(SHOOTING_WAIT_TIME_MS_2),
+                shooter.closeGate(),
 
-            //go to intake second flower
-            follow(follower, intakeSecondFlower()),
+                //go to intake second flower
+                follow(follower, intakeSecondFlower()),
 
-            //turn on intake and wait to intake balls
-            intake.turnOnIntake(),
-            waitMs(SECOND_FLOWER_WAIT_TIME_MS),
+                //turn on intake and wait to intake balls
+                intake.turnOnIntake(),
+                waitMs(SECOND_FLOWER_WAIT_TIME_MS),
 
-            //go to shoot second flower
-            follow(follower, goToShootSecondFlower()),
+                //go to shoot second flower
+                follow(follower, goToShootSecondFlower()),
 
-            //shoot second flower
-            shooter.setRPM(1575),
-            shooter.setHood(0.262),
-            shooter.openGate(),
-            waitMs(REV_UP_WAIT_TIME_MS),
-            intake.turnOnIntakeSlow(),
-            waitMs(SHOOTING_WAIT_TIME_MS),
-            shooter.closeGate(),
+                //shoot second flower
+                shooter.setRPM(1575),
+                shooter.setHood(0.262),
+                shooter.openGate(),
+                waitMs(REV_UP_WAIT_TIME_MS),
+                intake.turnOnIntakeSlow(),
+                waitMs(SHOOTING_WAIT_TIME_MS),
+                shooter.closeGate(),
 
-            //goes to park
-            follow(follower, park())
+                //goes to park
+                follow(follower, park())
+            )
         );
         waitForStart();
 
