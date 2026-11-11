@@ -92,7 +92,6 @@ public class productionOpmode extends LinearOpMode {
             shooter.toggleShooter(gamepad2);
             if (gamepad2.a){
                 if (!shooter.isOn()) {
-                    shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                     intake.intakePollen();
                 }
                 else {
@@ -114,9 +113,14 @@ public class productionOpmode extends LinearOpMode {
                 shooter.updateShooterVelocity();
             }
             else {
+                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
+                shooter.updateShooterVelocity();
+
 //                shooter.turnOff();
                 //or keep shooter on at a lower rpm
-                shooter.turnOffRestingRpm();
+//                shooter.turnOffRestingRpm();
+//                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
+                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 shooter.setHoodPosition(0);
             }
 
