@@ -27,10 +27,10 @@ public class redAuto extends LinearOpMode {
     public static double FIRST_FLOWER_Y = 48.6335;
     public static double FIRST_FLOWER_X = 5.5;
     public static double SECOND_FLOWER_Y = 131.5;
-    public static double SECOND_FLOWER_X = 42.2 - 3;
+    public static double SECOND_FLOWER_X = 42.2;
     public static double SHIMMY_OFFSET_BACKWARD = 1;
     public static double SHIMMY_OFFSET_FORWARD_FIRST_FLOWER = 1;
-    public static double SHIMMY_OFFSET_FORWARD_SECOND_FLOWER = 0.8;
+    public static double SHIMMY_OFFSET_FORWARD_SECOND_FLOWER = 0.9;
 
 
     public static double SECOND_SHOOT_Y = 131.5;
@@ -43,7 +43,7 @@ public class redAuto extends LinearOpMode {
     public static double THIRD_REV_UP_WAIT_TIME_MS = 1500;
     public static double TIP_WAIT_TIME_MS = 2500;
     public static double SHOOTING_WAIT_TIME_MS = 1250;
-    public static double SHOOTING_WAIT_TIME_MS_2 = 1250;
+    public static double SHOOTING_WAIT_TIME_MS_2 = 1500;
 
     public static double FIRST_FLOWER_WAIT_TIME_MS = 2000;
     public static double SECOND_FLOWER_WAIT_TIME_MS = 2000;
@@ -63,13 +63,13 @@ public class redAuto extends LinearOpMode {
     private final Pose goToShootFirstFlowerControl2 = poseFactory.of(10.4061, 95.461, 0);
     //    private final Pose backUpToShootFirstFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, SECOND_FLOWER_ANGLE);
     private final Pose intakeSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, 270);
-    private final Pose shimmyBackSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y - SHIMMY_OFFSET_BACKWARD, 270);
-    private final Pose shimmyForwardSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y + SHIMMY_OFFSET_FORWARD_SECOND_FLOWER, 270);
+    private final Pose shimmeyBackSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y - SHIMMY_OFFSET_BACKWARD, 270);
+    private final Pose shimmeyForwardSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y + SHIMMY_OFFSET_FORWARD_SECOND_FLOWER, 270);
     private final Pose intakeSecondFlowerControl1 = poseFactory.of(48.2351, 111.8873, 0);
     private final Pose goToShootSecondFlowerStart = poseFactory.of(49.1517, 130.1241, 270);
     private final Pose goToShootSecondFlower = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
     private final Pose goToShootSecondFlowerControl1 = poseFactory.of(54.0167, 119.8707, 0);
-    private final Pose park = poseFactory.of(12.232, 118.4468, 177.7608);
+    private final Pose park = poseFactory.of(10.232, 118.4468, 177.7608);
     private final Pose parkControl1 = poseFactory.of(52.0519, 114.9289, 0);
 
     //initialize paths from poses
@@ -83,10 +83,14 @@ public class redAuto extends LinearOpMode {
     }
 
     public Path shimmeyBackFirstFlower() {
-        return Paths.line(intakeFirstFlower, shimmeyBackFirstFlower).constant(shimmeyBackFirstFlower);
+        return Paths.line(shimmeyForwardFirstFlower, shimmeyBackFirstFlower).constant(shimmeyBackFirstFlower);
     }
 
     public Path shimmeyForwardFirstFlower() {
+        return Paths.line(shimmeyBackFirstFlower, shimmeyForwardFirstFlower).constant(shimmeyForwardFirstFlower);
+    }
+
+    public Path pushForwardFirstFlower() {
         return Paths.line(intakeFirstFlower, shimmeyForwardFirstFlower).constant(shimmeyForwardFirstFlower);
     }
 
@@ -105,15 +109,20 @@ public class redAuto extends LinearOpMode {
         return Paths.curve(goToShootFirstFlower, intakeSecondFlowerControl1, intakeSecondFlower).constant(intakeSecondFlower);
     }
     public Path shimmeyBackSecondFlower() {
-        return Paths.line(intakeSecondFlower, shimmyBackSecondFlower).constant(shimmyBackSecondFlower);
+        return Paths.line(shimmeyForwardSecondFlower, shimmeyBackSecondFlower).constant(shimmeyBackSecondFlower);
     }
 
     public Path shimmeyForwardSecondFlower() {
-        return Paths.line(intakeSecondFlower, shimmyForwardSecondFlower).constant(shimmyForwardSecondFlower);
+        return Paths.line(shimmeyBackSecondFlower, shimmeyForwardSecondFlower).constant(shimmeyForwardSecondFlower);
+    }
+
+    public Path pushForwardSecondFlower() {
+        return Paths.line(intakeSecondFlower, shimmeyForwardSecondFlower).constant(shimmeyForwardSecondFlower);
     }
 
     public Path goToShootSecondFlower() {
-        return Paths.curve(goToShootSecondFlowerStart, goToShootSecondFlowerControl1, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower);
+        return Paths.curve(goToShootSecondFlowerStart, goToShootSecondFlowerControl1, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower)
+                .with(Constants.foresightConfig.maxPathSpeed.at(0.9));
     }
 
     public Path park() {
@@ -140,8 +149,8 @@ public class redAuto extends LinearOpMode {
                         TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1618),
-                                shooter.setHood(0.285),
+                                shooter.setRPM(1585), //TODO: change arc
+                                shooter.setHood(0.275),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
@@ -159,11 +168,15 @@ public class redAuto extends LinearOpMode {
                                 follow(follower, intakeFirstFlower()),
                                 //turn on intake and wait for balls to be intaked
                                 intake.turnOnIntake(),
-                                //shimmey
-//                                follow(follower, shimmeyBackFirstFlower()),
                                 race(
-                                        follow(follower, shimmeyForwardFirstFlower()),
+                                        follow(follower, pushForwardFirstFlower()),
                                         waitMs(FIRST_FLOWER_WAIT_TIME_MS)),
+                                //shimmey
+                                follow(follower,shimmeyBackFirstFlower()),
+                                race(
+                                    follow(follower, shimmeyForwardFirstFlower()),
+                                    waitMs(250)),
+
 
                                 //go to shoot first flower
                                 follow(follower, backUpFromFirstFlower()),
@@ -172,8 +185,8 @@ public class redAuto extends LinearOpMode {
                                 //            follow(follower, backUpToShootFirstFlower()),
 
                                 //shoot first flower
-                                shooter.setRPM(1603),
-                                shooter.setHood(0.27),
+                                shooter.setRPM(1570),
+                                shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(TIP_WAIT_TIME_MS),
                                 waitMs(SECOND_REV_UP_WAIT_TIME_MS),
@@ -188,8 +201,12 @@ public class redAuto extends LinearOpMode {
                                 //shimmey
 //                                follow(follower, shimmeyBackSecondFlower()),
                                 race(
-                                        follow(follower, shimmeyForwardSecondFlower()),
+                                        follow(follower, pushForwardSecondFlower()),
                                         waitMs(SECOND_FLOWER_WAIT_TIME_MS)),
+                                follow(follower,shimmeyBackSecondFlower()),
+                                race(
+                                        follow(follower, shimmeyForwardSecondFlower()),
+                                        waitMs(250)),
 
 
 
@@ -198,8 +215,8 @@ public class redAuto extends LinearOpMode {
                                 intake.turnOffIntake(),
 
                                 //shoot second flower
-                                shooter.setRPM(1603),
-                                shooter.setHood(0.27),
+                                shooter.setRPM(1570),
+                                shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(THIRD_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
