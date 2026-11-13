@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Configurable
-@Autonomous(name = "\uD83D\uDD33 blueAutoDepot")
+@Autonomous(name = "\uD83D\uDD35 blueAutoDepot")
 public class blueAutoDepot extends LinearOpMode {
     //define poses
     private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);

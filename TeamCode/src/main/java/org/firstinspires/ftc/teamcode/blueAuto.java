@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.pedro.Constants;
 @Autonomous(name = "\uD83D\uDD35 blueAuto")
 public class blueAuto extends LinearOpMode {
     //define poses
-    private final PoseFactory poseFactory = PoseFactory.degrees();
+    private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);
     public static double FIRST_FLOWER_Y = 48.6335;
     public static double FIRST_FLOWER_X = 5.5;
     public static double SECOND_FLOWER_Y = 131.5;
