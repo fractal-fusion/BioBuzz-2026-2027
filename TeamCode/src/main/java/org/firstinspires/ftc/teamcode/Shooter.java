@@ -49,7 +49,7 @@ public class Shooter {
     public static double HOOD_MAX_POSITION = 0.36;
 
     //regression variables
-    public static double REGRESSION_RPM_OFFSET = -20;
+    public static double REGRESSION_RPM_OFFSET = 35;
     public static double REGRESSION_HOOD_OFFSET = -0.14;
     public static double REGRESSION_RESTING_RPM = 1500; //lower rpm to keep the shooter running at
 

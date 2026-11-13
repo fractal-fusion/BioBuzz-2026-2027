@@ -28,7 +28,7 @@ public class Drivetrain {
     //autoalign proportional controller values
     public static double SECONDARY_PID_THRESHOLD = 0.2; //less than this switch to secondary pid
     public static double primaryP = 0.5;
-    public static double secondaryP = 0.8;
+    public static double secondaryP = 1.2;
 
     //current goal pose
     private Pose currentGoalPose = TeleopPoseManager.matchUpwardsGoalPose; //default will be red

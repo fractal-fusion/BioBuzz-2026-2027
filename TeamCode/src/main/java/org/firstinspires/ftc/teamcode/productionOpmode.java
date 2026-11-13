@@ -154,6 +154,8 @@ public class productionOpmode extends LinearOpMode {
 
             telemetry.addData("current pose:", follower.pose());
             telemetry.addData("current angle:", Math.toDegrees(follower.pose().heading()));
+            telemetry.addData("current bearing:", Math.toDegrees(drivetrain.calculateOdoGoalBearing(follower.pose(), drivetrain.getCurrentGoalPose())));
+
             telemetry.addData("current distance:", drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose()));
             telemetry.addData("currentGoal", drivetrain.getCurrentGoalPose());
 
@@ -162,7 +164,7 @@ public class productionOpmode extends LinearOpMode {
 
             //update all telemetry
             telemetry.update();
-            panelsTelemetry.update(telemetry);
+//            panelsTelemetry.update(telemetry);
 
             //update drivetrain imu for field centric
             drivetrain.updateIMU();

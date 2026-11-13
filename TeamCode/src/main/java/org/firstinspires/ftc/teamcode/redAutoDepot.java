@@ -29,7 +29,7 @@ public class redAutoDepot extends LinearOpMode {
     public static double FIRST_FLOWER_X = 5.5;
     public static double SECOND_FLOWER_Y = 131.5;
     public static double SECOND_FLOWER_X = 42.2;
-    public static double SHIMMY_OFFSET_BACKWARD = 1;
+    public static double SHIMMY_OFFSET_BACKWARD = 2;
     public static double SHIMMY_OFFSET_FORWARD_FIRST_FLOWER = 1.1;
     public static double SHIMMY_OFFSET_FORWARD_SECOND_FLOWER = 0.9;
 
