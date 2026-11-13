@@ -1,5 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.commands.Commands.waitMs;
+import static com.pedropathing.ivy.groups.Groups.parallel;
+import static com.pedropathing.ivy.groups.Groups.race;
+import static com.pedropathing.ivy.groups.Groups.sequential;
+import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.api.Paths;
 import com.pedropathing.api.PoseFactory;
@@ -8,20 +15,13 @@ import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.math.Pose;
 import com.pedropathing.paths.Path;
-import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.groups.Groups.*;
-
-import static com.pedropathing.ivy.commands.Commands.*;
-import static com.pedropathing.ivy.pedro.PedroCommands.*;
 
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Configurable
-@Autonomous(name = "\uD83D\uDD34 redAutoDepot")
+@Autonomous(name = "\uD83D\uDD34 redAuto")
 public class redAuto extends LinearOpMode {
     //define poses
     private final PoseFactory poseFactory = PoseFactory.degrees();
@@ -42,7 +42,6 @@ public class redAuto extends LinearOpMode {
     public static double FIRST_REV_UP_WAIT_TIME_MS = 3000;
     public static double SECOND_REV_UP_WAIT_TIME_MS = 1500;
     public static double THIRD_REV_UP_WAIT_TIME_MS = 1500;
-    public static double FOURTH_REV_UP_WAIT_TIME_MS = 1500;
     public static double TIP_WAIT_TIME_MS = 2500;
     public static double SHOOTING_WAIT_TIME_MS = 1250;
     public static double SHOOTING_WAIT_TIME_MS_2 = 1500;
@@ -51,18 +50,9 @@ public class redAuto extends LinearOpMode {
     public static double SECOND_FLOWER_WAIT_TIME_MS = 2000;
 
     private final Pose start = poseFactory.of(55, 11.26, 90);
-    private final Pose intakeDepot = poseFactory.of(2.3407, 9.0866, 0);
-    private final Pose goToShootDepot2 = poseFactory.of(59.98, 133.67, -100);
-    private final Pose goToShootDepot2Control1 = poseFactory.of(27.683, 21.1185, 0);
-    private final Pose goToShootDepot2Control2 = poseFactory.of(0, 113.5835, 0);
-    private final Pose goToShootDepot2Control3 = poseFactory.of(56.9043, 116.0123, 0);
-    private final Pose goToShootDepot2Segment1Start = poseFactory.of(59.98, 133.67, 0);
-    private final Pose goToShootDepot2Segment1End = poseFactory.of(59.98, 133.67, 260);
     private final Pose goToIntakeFirstFlowerStart = poseFactory.of(56, 11.26, 90);
-    private final Pose goToIntakeFirstFlowerControl1 = poseFactory.of(21.1289, 91.3507, 0);
-    private final Pose goToIntakeFirstFlowerSegment1Start = poseFactory.of(15.7542, 48.6489, 260);
-    private final Pose goToIntakeFirstFlowerSegment1End = poseFactory.of(15.7542, 48.6489, 0);
     private final Pose goToIntakeFirstFlower = poseFactory.of(17.2658, FIRST_FLOWER_Y, 0);
+    private final Pose goToIntakeFirstFlowerControl1 = poseFactory.of(12.8992, 29.3762, 0);
     private final Pose intakeFirstFlower = poseFactory.of(FIRST_FLOWER_X, FIRST_FLOWER_Y, 0);
     private final Pose shimmeyBackFirstFlower = poseFactory.of(FIRST_FLOWER_X + SHIMMY_OFFSET_BACKWARD, FIRST_FLOWER_Y, 0);
     private final Pose shimmeyForwardFirstFlower = poseFactory.of(FIRST_FLOWER_X - SHIMMY_OFFSET_FORWARD_FIRST_FLOWER, FIRST_FLOWER_Y, 0);
@@ -85,16 +75,8 @@ public class redAuto extends LinearOpMode {
 
     //initialize paths from poses
 
-    public Path goToIntakeDepot() {
-        return Paths.line(start, intakeDepot).constant(intakeDepot);
-    }
-
-    public Path goToShootDepot() {
-        return Paths.curve(intakeDepot, goToShootDepot2Control1, goToShootDepot2Control2, goToShootDepot2Control3, goToShootDepot2).heading(Interpolator.piecewise().until(1, Interpolator.linear(goToShootDepot2Segment1Start, goToShootDepot2Segment1End)));
-    }
-
     public Path goToIntakeFirstFlower() {
-        return Paths.curve(goToShootDepot2, goToIntakeFirstFlowerControl1, goToIntakeFirstFlower).heading(Interpolator.piecewise().until(1, Interpolator.linear(goToIntakeFirstFlowerSegment1Start, goToIntakeFirstFlowerSegment1End)));
+        return Paths.curve(goToIntakeFirstFlowerStart, goToIntakeFirstFlowerControl1, goToIntakeFirstFlower).linear(goToIntakeFirstFlowerStart, goToIntakeFirstFlower);
     }
 
     public Path intakeFirstFlower() {
@@ -176,27 +158,6 @@ public class redAuto extends LinearOpMode {
                                 waitMs(SHOOTING_WAIT_TIME_MS),
                                 shooter.closeGate(),
 
-                                //turn on intake
-                                intake.turnOnIntake(),
-                                //go to intake depot
-                                race(follow(follower, goToIntakeDepot()),
-                                        waitMs(1000)),
-
-                                //go to shoot depot
-                                parallel(
-                                        follow(follower, goToShootDepot()),
-                                        shooter.setRPM(1570),
-                                        shooter.setHood(0.265)
-                                ),
-                                intake.turnOffIntake(),
-                                //shoot depot
-                                shooter.openGate(),
-                                waitMs(TIP_WAIT_TIME_MS),
-                                waitMs(SECOND_REV_UP_WAIT_TIME_MS),
-                                intake.turnOnIntakeSlow(),
-                                waitMs(SHOOTING_WAIT_TIME_MS_2),
-                                shooter.closeGate(),
-
                                 //go to intake first flower
                                 parallel(follow(follower, goToIntakeFirstFlower()),
                                         sequential(
@@ -228,7 +189,8 @@ public class redAuto extends LinearOpMode {
                                 shooter.setRPM(1570),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
-                                waitMs(THIRD_REV_UP_WAIT_TIME_MS),
+                                waitMs(TIP_WAIT_TIME_MS),
+                                waitMs(SECOND_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
                                 waitMs(SHOOTING_WAIT_TIME_MS_2),
                                 shooter.closeGate(),
@@ -257,7 +219,7 @@ public class redAuto extends LinearOpMode {
                                 shooter.setRPM(1570),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
-                                waitMs(FOURTH_REV_UP_WAIT_TIME_MS),
+                                waitMs(THIRD_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
                                 waitMs(SHOOTING_WAIT_TIME_MS),
                                 shooter.closeGate(),
