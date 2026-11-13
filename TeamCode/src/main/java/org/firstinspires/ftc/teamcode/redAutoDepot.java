@@ -48,8 +48,8 @@ public class redAutoDepot extends LinearOpMode {
     public static double SHOOTING_WAIT_TIME_MS = 1150;
     public static double SHOOTING_WAIT_TIME_MS_2 = 1150;
 
-    public static double FIRST_FLOWER_WAIT_TIME_MS = 1500;
-    public static double SECOND_FLOWER_WAIT_TIME_MS = 1500;
+    public static double FIRST_FLOWER_WAIT_TIME_MS = 750;
+    public static double SECOND_FLOWER_WAIT_TIME_MS = 750;
     public static double FIRST_FLOWER_DROP_RAMP_WAIT_TIME_MS = 300;
 
     private final Pose start = poseFactory.of(55, 11.26, 90);
@@ -227,7 +227,7 @@ public class redAutoDepot extends LinearOpMode {
                                 follow(follower,shimmeyBackFirstFlower()),
                                 race(
                                     follow(follower, shimmeyForwardFirstFlower()),
-                                    waitMs(250)),
+                                    waitMs(FIRST_FLOWER_WAIT_TIME_MS)),
 
 
                                 //go to shoot first flower
@@ -257,7 +257,7 @@ public class redAutoDepot extends LinearOpMode {
                                 follow(follower,shimmeyBackSecondFlower()),
                                 race(
                                         follow(follower, shimmeyForwardSecondFlower()),
-                                        waitMs(250)),
+                                        waitMs(SECOND_FLOWER_WAIT_TIME_MS)),
 
 
 
