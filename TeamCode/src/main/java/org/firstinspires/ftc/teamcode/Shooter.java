@@ -36,9 +36,9 @@ public class Shooter {
 
     //.setVelocity PIDF values
     public static double P = 100;
-    public static double I = 0.18;
+    public static double I = 0.15;
     public static double D = 0;
-    public static double F = 18;
+    public static double F = 15;
 
     //gate variables
     public static double GATE_OPEN_POSITION = 0.01;
@@ -144,9 +144,10 @@ public class Shooter {
     public void setGatePosition(double position){
         gate.setPosition(position);
     }
-    public void controlGate(){
+    public void controlGate(Gamepad gamepad){
         if (isOn && passedRPMThreshold){
             gate.setPosition(GATE_OPEN_POSITION);
+            gamepad.rumbleBlips(1);
         }
     }
 

@@ -114,14 +114,14 @@ public class productionOpmode extends LinearOpMode {
             }
             else {
                 shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
+                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_HOOD_OFFSET);
                 shooter.updateShooterVelocity();
-
 //                shooter.turnOff();
                 //or keep shooter on at a lower rpm
 //                shooter.turnOffRestingRpm();
 //                shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
                 shooter.setGatePosition(Shooter.GATE_CLOSED_POSITION);
-                shooter.setHoodPosition(0);
+//                shooter.setHoodPosition(0);
             }
 
             //manual hood control TODO:REMOVE
@@ -169,8 +169,8 @@ public class productionOpmode extends LinearOpMode {
 
 
             //shooter updates
-            //automatically opens gate when shooter passes threshold
-            shooter.controlGate();
+            //automatically opens gate when shooter passes threshold and rumble controller
+            shooter.controlGate(gamepad2);
 
             shooter.updateGamepad(gamepad2);
             shooter.updateShooterThreshold();

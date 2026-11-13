@@ -27,7 +27,6 @@ public class TeleopPoseManager {
     public static Pose RED_TOP_LEFT_POSE = poseFactory.of(FIELD_WIDTH - BOT_HEIGHT/2, FIELD_HEIGHT - BOT_WIDTH/2, 0);
     public static Pose RED_TOP_RIGHT_POSE = poseFactory.of(FIELD_WIDTH - BOT_HEIGHT/2, BOT_WIDTH/2, 0);
 
-    //TODO: find these
     public static Pose BLUE_BOTTOM_LEFT_POSE = RED_TOP_RIGHT_POSE.withHeading(Math.toRadians(180));
     public static Pose BLUE_BOTTOM_RIGHT_POSE = RED_TOP_LEFT_POSE.withHeading(Math.toRadians(180));
     public static Pose BLUE_TOP_LEFT_POSE = RED_BOTTOM_RIGHT_POSE.withHeading(Math.toRadians(180));

@@ -150,7 +150,7 @@ public class redAuto extends LinearOpMode {
                         TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1585), //TODO: change arc
+                                shooter.setRPM(1585),
                                 shooter.setHood(0.275),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
