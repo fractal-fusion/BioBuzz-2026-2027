@@ -33,27 +33,28 @@ public class redAutoDepot extends LinearOpMode {
     public static double SHIMMY_OFFSET_FORWARD_FIRST_FLOWER = 1.1;
     public static double SHIMMY_OFFSET_FORWARD_SECOND_FLOWER = 0.9;
 
-    public static double DEPOT_TIMEOUT_TIME_MS = 6000;
+    public static double DEPOT_TIMEOUT_TIME_MS = 2500;
 
 
     public static double SECOND_SHOOT_Y = 131.5;
-    public static double SECOND_SHOOT_X = 54.72;
+    public static double SECOND_SHOOT_X = 52.72;
 
-    public static double SHOOT_SECOND_FLOWER_ANGLE = 260;
+    public static double SHOOT_SECOND_FLOWER_ANGLE = 261;
     public static double FIRST_REV_UP_WAIT_TIME_MS = 1500;
     public static double SECOND_REV_UP_WAIT_TIME_MS = 500;
     public static double THIRD_REV_UP_WAIT_TIME_MS = 500;
     public static double FOURTH_REV_UP_WAIT_TIME_MS = 500;
     public static double TIP_WAIT_TIME_MS = 1000;
     public static double SHOOTING_WAIT_TIME_MS = 1250;
-    public static double SHOOTING_WAIT_TIME_MS_2 = 1500;
+    public static double SHOOTING_WAIT_TIME_MS_2 = 1250;
 
     public static double FIRST_FLOWER_WAIT_TIME_MS = 1500;
     public static double SECOND_FLOWER_WAIT_TIME_MS = 1500;
     public static double FIRST_FLOWER_DROP_RAMP_WAIT_TIME_MS = 300;
 
     private final Pose start = poseFactory.of(55, 11.26, 90);
-    private final Pose intakeDepot = poseFactory.of(0, 9.0866, 0);
+    private final Pose intakeDepot = poseFactory.of(0, 9.0866, 90);
+    private final Pose intakeDepotControl1 = poseFactory.of(0, 28.3869, 0);
     private final Pose goToShootDepot = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
     private final Pose goToShootDepotControl1 = poseFactory.of(27.683, 21.1185, 0);
     private final Pose goToShootDepotControl2 = poseFactory.of(0, 139.11, 0);
@@ -88,7 +89,7 @@ public class redAutoDepot extends LinearOpMode {
     //initialize paths from poses
 
     public Path goToIntakeDepot() {
-        return Paths.line(start, intakeDepot).constant(intakeDepot);
+        return Paths.curve(start, intakeDepotControl1, intakeDepot).constant(intakeDepot);
     }
 
     public Path goToShootDepot() {
@@ -174,19 +175,24 @@ public class redAutoDepot extends LinearOpMode {
                         TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1585), //TODO: change arc
-                                shooter.setHood(0.270),
+                                shooter.setRPM(1550), //TODO: change arc
+                                shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
                                 waitMs(SHOOTING_WAIT_TIME_MS),
                                 shooter.closeGate(),
 
-                                //turn on intake
-                                intake.turnOnIntake(),
-                                //go to intake depot
-                                race(follow(follower, goToIntakeDepot()),
-                                        waitMs(DEPOT_TIMEOUT_TIME_MS)),
+                                //go to intake depot and turn on intake in the middle of the path
+                                parallel(
+                                        race(follow(follower, goToIntakeDepot()),
+                                                waitMs(DEPOT_TIMEOUT_TIME_MS)
+                                        ),
+                                        sequential(
+                                                waitMs(DEPOT_TIMEOUT_TIME_MS/3),
+                                                intake.turnOnIntake())
+
+                                ),
 
                                 //go to shoot depot
                                 parallel(
