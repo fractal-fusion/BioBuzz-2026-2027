@@ -176,7 +176,7 @@ public class blueAutoDepot extends LinearOpMode {
                         TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.BLUE, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1565),
+                                shooter.setRPM(1585),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
@@ -199,7 +199,7 @@ public class blueAutoDepot extends LinearOpMode {
                                 parallel(
                                         follow(follower, goToShootDepot()),
                                         shooter.setRPM(1585),
-                                        shooter.setHood(0.265)
+                                        shooter.setHood(0.260)
                                 ),
                                 intake.turnOffIntake(),
                                 //shoot depot
@@ -239,7 +239,7 @@ public class blueAutoDepot extends LinearOpMode {
 
                                 //shoot first flower
                                 shooter.setRPM(1585),
-                                shooter.setHood(0.265),
+                                shooter.setHood(0.260),
                                 shooter.openGate(),
                                 waitMs(THIRD_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
@@ -268,7 +268,7 @@ public class blueAutoDepot extends LinearOpMode {
 
                                 //shoot second flower
                                 shooter.setRPM(1585),
-                                shooter.setHood(0.265),
+                                shooter.setHood(0.260),
                                 shooter.openGate(),
                                 waitMs(FOURTH_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
