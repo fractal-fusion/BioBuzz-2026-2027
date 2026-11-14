@@ -31,7 +31,7 @@ public class redAutoDepot extends LinearOpMode {
     public static double SECOND_FLOWER_X = 42.2;
     public static double SHIMMY_OFFSET_BACKWARD = 2;
     public static double SHIMMY_OFFSET_FORWARD_FIRST_FLOWER = 1.1;
-    public static double SHIMMY_OFFSET_FORWARD_SECOND_FLOWER = 0.9;
+    public static double SHIMMY_OFFSET_FORWARD_SECOND_FLOWER = 0.6;
 
     public static double DEPOT_TIMEOUT_TIME_MS = 2500;
 
@@ -46,7 +46,7 @@ public class redAutoDepot extends LinearOpMode {
     public static double FOURTH_REV_UP_WAIT_TIME_MS = 400;
     public static double TIP_WAIT_TIME_MS = 1000;
     public static double SHOOTING_WAIT_TIME_MS = 1150;
-    public static double SHOOTING_WAIT_TIME_MS_2 = 1150;
+    public static double SHOOTING_WAIT_TIME_MS_2 = 1250;
 
     public static double FIRST_FLOWER_WAIT_TIME_MS = 750;
     public static double SECOND_FLOWER_WAIT_TIME_MS = 750;
@@ -175,7 +175,7 @@ public class redAutoDepot extends LinearOpMode {
                         TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1550),
+                                shooter.setRPM(1565),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
@@ -197,7 +197,7 @@ public class redAutoDepot extends LinearOpMode {
                                 //go to shoot depot
                                 parallel(
                                         follow(follower, goToShootDepot()),
-                                        shooter.setRPM(1570),
+                                        shooter.setRPM(1585),
                                         shooter.setHood(0.265)
                                 ),
                                 intake.turnOffIntake(),
@@ -237,7 +237,7 @@ public class redAutoDepot extends LinearOpMode {
                                 //            follow(follower, backUpToShootFirstFlower()),
 
                                 //shoot first flower
-                                shooter.setRPM(1570),
+                                shooter.setRPM(1585),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(THIRD_REV_UP_WAIT_TIME_MS),
@@ -266,7 +266,7 @@ public class redAutoDepot extends LinearOpMode {
                                 intake.turnOffIntake(),
 
                                 //shoot second flower
-                                shooter.setRPM(1570),
+                                shooter.setRPM(1585),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(FOURTH_REV_UP_WAIT_TIME_MS),

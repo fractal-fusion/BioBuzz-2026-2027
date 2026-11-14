@@ -101,8 +101,8 @@ public class testOpmode extends LinearOpMode {
             testServo.setPosition(testPosition);
 
             telemetry.addData("servopos:", testPosition);
-            telemetry.addData("shooter regression velocity:", shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(new Pose(55.72, 133.25), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
-            telemetry.addData("shooter regression hood:", shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(new Pose(55.72, 133.25), drivetrain.getCurrentGoalPose())));
+            telemetry.addData("shooter regression velocity:", shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(new Pose(52.72, 131.5), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
+            telemetry.addData("shooter regression hood:", shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(new Pose(52.72, 131.5), drivetrain.getCurrentGoalPose()) + Shooter.HOOD_OFFSET));
             telemetry.update();
 
         }
