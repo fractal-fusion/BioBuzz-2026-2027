@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autos;
 
 import static com.pedropathing.ivy.Scheduler.schedule;
 import static com.pedropathing.ivy.commands.Commands.waitMs;
@@ -19,13 +19,16 @@ import com.pedropathing.paths.interpolator.Interpolator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Intake;
+import org.firstinspires.ftc.teamcode.Shooter;
+import org.firstinspires.ftc.teamcode.TeleopPoseManager;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Configurable
-@Autonomous(name = "\uD83D\uDD35 blueAutoDepot")
-public class blueAutoDepot extends LinearOpMode {
+@Autonomous(name = "\uD83D\uDD34 redAutoDepotOneTip")
+public class redAutoDepotOneTip extends LinearOpMode {
     //define poses
-    private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);
+    private final PoseFactory poseFactory = PoseFactory.degrees();
     public static double FIRST_FLOWER_Y = 48.6335;
     public static double FIRST_FLOWER_X = 5.5;
     public static double SECOND_FLOWER_Y = 131.5;
@@ -56,12 +59,9 @@ public class blueAutoDepot extends LinearOpMode {
     private final Pose start = poseFactory.of(55, 11.26, 90);
     private final Pose intakeDepot = poseFactory.of(0, 9.0866, 90);
     private final Pose intakeDepotControl1 = poseFactory.of(0, 28.3869, 0);
-    private final Pose goToShootDepot = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
-    private final Pose goToShootDepotControl1 = poseFactory.of(27.683, 21.1185, 0);
-    private final Pose goToShootDepotControl2 = poseFactory.of(0, 139.11, 0);
-    private final Pose goToShootDepotControl3 = poseFactory.of(56.9043, 116.0123, 0);
-    private final Pose goToShootDepotSegment1Start = poseFactory.of(59.98, 133.67, 0);
-    private final Pose goToShootDepotSegment1End = poseFactory.of(59.98, 133.67, SHOOT_SECOND_FLOWER_ANGLE);
+    private final Pose goToShootDepot = poseFactory.of(55.7812, 11.4006, 90);
+    private final Pose goToShootDepotSegment1Start = poseFactory.of(55.7812, 11.4006, 0);
+    private final Pose goToShootDepotSegment1End = poseFactory.of(55.7812, 11.4006, 90);
     private final Pose goToIntakeFirstFlowerStart = poseFactory.of(56, 11.26, 90);
     private final Pose goToIntakeFirstFlowerControl1 = poseFactory.of(7.36, 97.56, 0);
     private final Pose goToIntakeFirstFlowerSegment1Start = poseFactory.of(15.7542, 48.6489, SHOOT_SECOND_FLOWER_ANGLE);
@@ -71,11 +71,9 @@ public class blueAutoDepot extends LinearOpMode {
     private final Pose shimmeyBackFirstFlower = poseFactory.of(FIRST_FLOWER_X + SHIMMY_OFFSET_BACKWARD, FIRST_FLOWER_Y, 0);
     private final Pose shimmeyForwardFirstFlower = poseFactory.of(FIRST_FLOWER_X - SHIMMY_OFFSET_FORWARD_FIRST_FLOWER, FIRST_FLOWER_Y, 0);
     private final Pose backUpFromFirstFlower = poseFactory.of(17.5657, 46.493, 0);
-    private final Pose goToShootFirstFlowerStart = poseFactory.of(17.5657, 46.493, 0);
-
-    private final Pose goToShootFirstFlower = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
-    private final Pose goToShootFirstFlowerControl1 = poseFactory.of(28.4159, 53.9977, 0);
-    private final Pose goToShootFirstFlowerControl2 = poseFactory.of(0, 90.47, 0);
+    private final Pose goToShootFirstFlowerStart = poseFactory.of(5.9, 48.6335, 0);
+    private final Pose goToShootFirstFlower = poseFactory.of(55.7079, 11.2768, 90);
+    private final Pose goToShootFirstFlowerControl1 = poseFactory.of(22.7055, 27.9651, 0);
     //    private final Pose backUpToShootFirstFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, SECOND_FLOWER_ANGLE);
     private final Pose intakeSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y, 270);
     private final Pose shimmeyBackSecondFlower = poseFactory.of(SECOND_FLOWER_X, SECOND_FLOWER_Y - SHIMMY_OFFSET_BACKWARD, 270);
@@ -85,7 +83,7 @@ public class blueAutoDepot extends LinearOpMode {
     private final Pose goToShootSecondFlower = poseFactory.of(SECOND_SHOOT_X, SECOND_SHOOT_Y, SHOOT_SECOND_FLOWER_ANGLE);
     private final Pose goToShootSecondFlowerControl1 = poseFactory.of(54.0167, 119.8707, 0);
     private final Pose park = poseFactory.of(10.232, 118.4468, 177.7608);
-    private final Pose parkControl1 = poseFactory.of(52.0519, 114.9289, 0);
+    private final Pose parkControl1 = poseFactory.of(0, 49.7633, 0);
 
     //initialize paths from poses
 
@@ -94,11 +92,11 @@ public class blueAutoDepot extends LinearOpMode {
     }
 
     public Path goToShootDepot() {
-        return Paths.curve(intakeDepot, goToShootDepotControl1, goToShootDepotControl2, goToShootDepotControl3, goToShootDepot).heading(Interpolator.piecewise().until(1, Interpolator.linear(goToShootDepotSegment1Start, goToShootDepotSegment1End)));
+        return Paths.line(intakeDepot, goToShootDepot).heading(Interpolator.piecewise().until(1, Interpolator.linear(goToShootDepotSegment1Start, goToShootDepotSegment1End)));
     }
 
     public Path goToIntakeFirstFlower() {
-        return Paths.curve(goToShootDepot, goToIntakeFirstFlowerControl1, goToIntakeFirstFlower).heading(Interpolator.piecewise().until(1, Interpolator.linear(goToIntakeFirstFlowerSegment1Start, goToIntakeFirstFlowerSegment1End)));
+        return Paths.line(goToShootDepot, goToIntakeFirstFlower).heading(Interpolator.piecewise().until(1, Interpolator.linear(goToIntakeFirstFlowerSegment1Start, goToIntakeFirstFlowerSegment1End)));
     }
 
     public Path intakeFirstFlower() {
@@ -124,7 +122,7 @@ public class blueAutoDepot extends LinearOpMode {
     }
 
     public Path goToShootFirstFlower() {
-        return Paths.curve(goToShootFirstFlowerStart, goToShootFirstFlowerControl1, goToShootFirstFlowerControl2, goToShootFirstFlower).linear(goToShootFirstFlowerStart, goToShootFirstFlower);
+        return Paths.curve(goToShootFirstFlowerStart, goToShootFirstFlowerControl1, goToShootFirstFlower).linear(goToShootFirstFlowerStart, goToShootFirstFlower);
     }
 
     //    public Path backUpToShootFirstFlower() {
@@ -132,7 +130,7 @@ public class blueAutoDepot extends LinearOpMode {
 //    }
     public Path intakeSecondFlower() {
         return Paths.curve(goToShootFirstFlower, intakeSecondFlowerControl1, intakeSecondFlower).constant(intakeSecondFlower);
-    }
+    }/*
     public Path shimmeyBackSecondFlower() {
         return Paths.line(shimmeyForwardSecondFlower, shimmeyBackSecondFlower).constant(shimmeyBackSecondFlower).with(
                 Constants.foresightConfig.maxPathSpeed.at(0.9)
@@ -151,9 +149,9 @@ public class blueAutoDepot extends LinearOpMode {
         return Paths.curve(goToShootSecondFlowerStart, goToShootSecondFlowerControl1, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower)
                 .with(Constants.foresightConfig.maxPathSpeed.at(0.9));
     }
-
+*/
     public Path park() {
-        return Paths.curve(goToShootSecondFlower, parkControl1, park).tangent();
+        return Paths.curve(goToShootFirstFlower, parkControl1, park).tangent();
     }
 
     @Override
@@ -173,10 +171,10 @@ public class blueAutoDepot extends LinearOpMode {
 
         Command autoSequence =
                 parallel(
-                        TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.BLUE, follower.pose()),
+                        TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1585),
+                                shooter.setRPM(1565),
                                 shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
@@ -199,7 +197,7 @@ public class blueAutoDepot extends LinearOpMode {
                                 parallel(
                                         follow(follower, goToShootDepot()),
                                         shooter.setRPM(1585),
-                                        shooter.setHood(0.260)
+                                        shooter.setHood(0.265)
                                 ),
                                 intake.turnOffIntake(),
                                 //shoot depot
@@ -239,7 +237,7 @@ public class blueAutoDepot extends LinearOpMode {
 
                                 //shoot first flower
                                 shooter.setRPM(1585),
-                                shooter.setHood(0.260),
+                                shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(THIRD_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
@@ -247,33 +245,33 @@ public class blueAutoDepot extends LinearOpMode {
                                 shooter.closeGate(),
 
                                 //go to intake second flower
-                                follow(follower, intakeSecondFlower()),
+                                //follow(follower, intakeSecondFlower()),
                                 //turn on intake and wait to intake balls
-                                intake.turnOnIntake(),
+                                //intake.turnOnIntake(),
                                 //shimmey
-//                                follow(follower, shimmeyBackSecondFlower()),
-                                race(
-                                        follow(follower, pushForwardSecondFlower()),
-                                        waitMs(SECOND_FLOWER_WAIT_TIME_MS)),
-                                follow(follower,shimmeyBackSecondFlower()),
-                                race(
-                                        follow(follower, shimmeyForwardSecondFlower()),
-                                        waitMs(SECOND_FLOWER_WAIT_TIME_MS)),
+//                              //follow(follower, shimmeyBackSecondFlower()),
+                                //race(
+                                        //follow(follower, pushForwardSecondFlower()),
+                                        //waitMs(SECOND_FLOWER_WAIT_TIME_MS)),
+                                //follow(follower,shimmeyBackSecondFlower()),
+                                //race(
+                                        //follow(follower, shimmeyForwardSecondFlower()),
+                                        //waitMs(SECOND_FLOWER_WAIT_TIME_MS)),
 
 
 
                                 //go to shoot second flower
-                                follow(follower, goToShootSecondFlower()),
-                                intake.turnOffIntake(),
+                                //follow(follower, goToShootSecondFlower()),
+                                //intake.turnOffIntake(),
 
                                 //shoot second flower
-                                shooter.setRPM(1585),
-                                shooter.setHood(0.260),
+                                /*shooter.setRPM(1585),
+                                shooter.setHood(0.265),
                                 shooter.openGate(),
                                 waitMs(FOURTH_REV_UP_WAIT_TIME_MS),
                                 intake.turnOnIntakeSlow(),
                                 waitMs(SHOOTING_WAIT_TIME_MS),
-                                shooter.closeGate(),
+                                shooter.closeGate(),*/
 
                                 //goes to park
                                 follow(follower, park())

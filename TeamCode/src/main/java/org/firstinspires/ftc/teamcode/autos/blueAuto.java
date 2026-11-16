@@ -1,11 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.waitMs;
-import static com.pedropathing.ivy.groups.Groups.parallel;
-import static com.pedropathing.ivy.groups.Groups.race;
-import static com.pedropathing.ivy.groups.Groups.sequential;
-import static com.pedropathing.ivy.pedro.PedroCommands.follow;
+package org.firstinspires.ftc.teamcode.autos;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.pedropathing.api.Paths;
@@ -18,13 +11,22 @@ import com.pedropathing.paths.Path;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import static com.pedropathing.ivy.Scheduler.schedule;
+import static com.pedropathing.ivy.groups.Groups.*;
+
+import static com.pedropathing.ivy.commands.Commands.*;
+import static com.pedropathing.ivy.pedro.PedroCommands.*;
+
+import org.firstinspires.ftc.teamcode.Intake;
+import org.firstinspires.ftc.teamcode.Shooter;
+import org.firstinspires.ftc.teamcode.TeleopPoseManager;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Configurable
-@Autonomous(name = "\uD83D\uDD34 redAuto")
-public class redAuto extends LinearOpMode {
+@Autonomous(name = "\uD83D\uDD35 blueAuto")
+public class blueAuto extends LinearOpMode {
     //define poses
-    private final PoseFactory poseFactory = PoseFactory.degrees();
+    private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);
     public static double FIRST_FLOWER_Y = 48.6335;
     public static double FIRST_FLOWER_X = 5.5;
     public static double SECOND_FLOWER_Y = 131.5;
@@ -122,8 +124,7 @@ public class redAuto extends LinearOpMode {
     }
 
     public Path goToShootSecondFlower() {
-        return Paths.curve(goToShootSecondFlowerStart, goToShootSecondFlowerControl1, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower)
-                .with(Constants.foresightConfig.maxPathSpeed.at(0.9));
+        return Paths.curve(goToShootSecondFlowerStart, goToShootSecondFlowerControl1, goToShootSecondFlower).linear(goToShootSecondFlowerStart, goToShootSecondFlower);
     }
 
     public Path park() {
@@ -147,10 +148,10 @@ public class redAuto extends LinearOpMode {
 
         Command autoSequence =
                 parallel(
-                        TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.RED, follower.pose()),
+                        TeleopPoseManager.initializeTeleop(TeleopPoseManager.Team.BLUE, follower.pose()),
                         sequential(
                                 //shoot preloads
-                                shooter.setRPM(1585),
+                                shooter.setRPM(1585), //TODO: change arc
                                 shooter.setHood(0.275),
                                 shooter.openGate(),
                                 waitMs(FIRST_REV_UP_WAIT_TIME_MS),
