@@ -108,13 +108,13 @@ public class productionOpmode extends LinearOpMode {
             //SHOOTER VELOCITY LOGIC
             if (shooter.isOn()){
 //                shooter.setTargetRPM(Shooter.staticRPM);
-                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
-                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_HOOD_OFFSET);
+                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
                 shooter.updateShooterVelocity();
             }
             else {
-                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_RPM_OFFSET);
-                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())) + Shooter.REGRESSION_HOOD_OFFSET);
+                shooter.setTargetRPM(shooter.calculateRPMRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
+                shooter.setHoodPosition(shooter.calculateHoodRegression(drivetrain.calculateOdoGoalDistance(follower.pose(), drivetrain.getCurrentGoalPose())));
                 shooter.updateShooterVelocity();
 //                shooter.turnOff();
                 //or keep shooter on at a lower rpm
