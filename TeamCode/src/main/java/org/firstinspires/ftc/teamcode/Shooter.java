@@ -110,7 +110,7 @@ public class Shooter {
     }
 
     public void setTargetRPM(double RPM) {
-        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION;
+        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
     }
     public boolean atTargetVelocity() {
         return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND)
@@ -164,7 +164,7 @@ public class Shooter {
 
     //regression calculation methods
     public double calculateRPMRegression(double distance){
-        return Range.clip(0.0000423963 * Math.pow(distance, 4) - 0.0069645 * Math.pow(distance, 3) + 0.387821 * Math.pow(distance, 2) - 5.55246 * distance + 1502.84812, 1520, 2050);
+        return Range.clip(0.0000423963 * Math.pow(distance, 4) - 0.0069645 * Math.pow(distance, 3) + 0.387821 * Math.pow(distance, 2) - 5.55246 * distance + 1502.84812, 1520, 2050) * SHOOTER_GEAR_REDUCTION;
     }
 
     public double calculateHoodRegression(double distance){
