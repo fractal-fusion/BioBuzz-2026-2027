@@ -164,7 +164,7 @@ public class productionOpmode extends LinearOpMode {
 
             //update all telemetry
             telemetry.update();
-//            panelsTelemetry.update(telemetry);
+            panelsTelemetry.update(telemetry);
 
             //update drivetrain imu for field centric
             drivetrain.updateIMU();
