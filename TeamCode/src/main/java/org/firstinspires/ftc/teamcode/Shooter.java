@@ -29,13 +29,14 @@ public class Shooter {
 
     public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
     public static double TICKS_PER_SECOND_TO_RPM = 60.0 / 28.0; //inverse of above
+    public static double SHOOTER_GEAR_REDUCTION = 2.46913580247;
 
-    public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND;
+    public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION;
     public static double TARGET_RPM_TOLERANCE = 10;
     public static double LOWER_THRESHOLD_RPM_OFFSET = 80;
 
     //.setVelocity PIDF values
-    public static double P = 100;
+    public static double P = 150;
     public static double I = 0.15;
     public static double D = 0;
     public static double F = 15;
@@ -45,12 +46,12 @@ public class Shooter {
     public static double GATE_CLOSED_POSITION = 0.13;
 
     //hood variables
-    public static double HOOD_OFFSET = 0.00; //offset so the hood is in the right place
+    public static double HOOD_OFFSET = 0.03; //offset so the hood is in the right place
     public static double HOOD_MAX_POSITION = 0.36;
 
     //regression variables
-    public static double REGRESSION_RPM_OFFSET = -40;
-    public static double REGRESSION_HOOD_OFFSET = -0.05;
+    public static double REGRESSION_RPM_OFFSET = 550;
+    public static double REGRESSION_HOOD_OFFSET = -0.09;
     public static double REGRESSION_RESTING_RPM = 1500; //lower rpm to keep the shooter running at
 
     //shooter position offset for autoalign
@@ -109,7 +110,7 @@ public class Shooter {
     }
 
     public void setTargetRPM(double RPM) {
-        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
+        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION;
     }
     public boolean atTargetVelocity() {
         return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND)

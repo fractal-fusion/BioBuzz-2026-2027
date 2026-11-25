@@ -55,7 +55,7 @@ public class Intake {
     public void intakePollen()
     {
             pollenIntake.setPower(INTAKE_SPEED);
-            pollenTransfer.setPower(INTAKE_SPEED);
+//            pollenTransfer.setPower(INTAKE_SPEED);
     }
 
     public void intakePollenSlow(){
