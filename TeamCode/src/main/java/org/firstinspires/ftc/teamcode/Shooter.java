@@ -29,7 +29,7 @@ public class Shooter {
 
     public static double RPM_TO_TICKS_PER_SECOND = 28.0 / 60.0; //divide rpm by 60 to get rotations per second, then multiply by 28 since that's the ticks per revolution
     public static double TICKS_PER_SECOND_TO_RPM = 60.0 / 28.0; //inverse of above
-    public static double SHOOTER_GEAR_REDUCTION = 2.46913580247;
+    public static double SHOOTER_GEAR_REDUCTION = 50.0 / 27.0;
 
     public double currentTargetRPMTicksPerSecond = REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION;
     public static double TARGET_RPM_TOLERANCE = 10;
