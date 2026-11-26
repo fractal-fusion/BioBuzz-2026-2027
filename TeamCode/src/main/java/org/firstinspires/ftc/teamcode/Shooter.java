@@ -36,10 +36,10 @@ public class Shooter {
     public static double LOWER_THRESHOLD_RPM_OFFSET = 80;
 
     //.setVelocity PIDF values
-    public static double P = 150;
-    public static double I = 0.15;
+    public static double P = 50;
+    public static double I = 0.14;
     public static double D = 0;
-    public static double F = 15;
+    public static double F = 14;
 
     //gate variables
     public static double GATE_OPEN_POSITION = 0.01;
