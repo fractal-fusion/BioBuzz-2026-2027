@@ -109,16 +109,17 @@ public class Shooter {
         ((DcMotorEx) shooterLeft).setVelocity(REGRESSION_RESTING_RPM * RPM_TO_TICKS_PER_SECOND);
     }
 
+    //multiply everything by shooter gear reduction so RPM dictates the speed of the flywheel, not the motor
     public void setTargetRPM(double RPM) {
-        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND;
+        currentTargetRPMTicksPerSecond = RPM * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION;
     }
     public boolean atTargetVelocity() {
-        return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND)
-                && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND);
+        return ((DcMotorEx) shooterLeft).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION)
+                && ((DcMotorEx) shooterRight).getVelocity() >= currentTargetRPMTicksPerSecond - (TARGET_RPM_TOLERANCE * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION);
     }
     public boolean atLowerThresholdVelocity() {
-        return ((DcMotorEx) shooterLeft).getVelocity() <= (currentTargetRPMTicksPerSecond - (LOWER_THRESHOLD_RPM_OFFSET * RPM_TO_TICKS_PER_SECOND))
-                && ((DcMotorEx) shooterRight).getVelocity() <= (currentTargetRPMTicksPerSecond - (LOWER_THRESHOLD_RPM_OFFSET * RPM_TO_TICKS_PER_SECOND));
+        return ((DcMotorEx) shooterLeft).getVelocity() <= (currentTargetRPMTicksPerSecond - (LOWER_THRESHOLD_RPM_OFFSET * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION))
+                && ((DcMotorEx) shooterRight).getVelocity() <= (currentTargetRPMTicksPerSecond - (LOWER_THRESHOLD_RPM_OFFSET * RPM_TO_TICKS_PER_SECOND * SHOOTER_GEAR_REDUCTION));
     }
 
     public void updateShooterThreshold(){
@@ -164,7 +165,7 @@ public class Shooter {
 
     //regression calculation methods
     public double calculateRPMRegression(double distance){
-        return (Range.clip(0.0000423963 * Math.pow(distance, 4) - 0.0069645 * Math.pow(distance, 3) + 0.387821 * Math.pow(distance, 2) - 5.55246 * distance + 1502.84812, 1520, 2050) + REGRESSION_RPM_OFFSET) * SHOOTER_GEAR_REDUCTION;
+        return (Range.clip(0.0000423963 * Math.pow(distance, 4) - 0.0069645 * Math.pow(distance, 3) + 0.387821 * Math.pow(distance, 2) - 5.55246 * distance + 1502.84812, 1520, 2050) + REGRESSION_RPM_OFFSET);
     }
 
     public double calculateHoodRegression(double distance){
